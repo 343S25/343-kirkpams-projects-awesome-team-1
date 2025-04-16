@@ -3,30 +3,41 @@
 //     date: <Date Object>,
 //     description: 'Description 1',
 //     amount: 100
+//     isDeposit: true
 // }
 
 // Account object
 // {
 //     accountName: 'Account Name 1',
 //     balance: 1000000,
-//     lastUpdated: <Date Object>
+//     lastUpdated: '4/16/2025'
 //     transactions: [
-//         { date: <Date Object>, description: 'Description 1', amount: 100 },
-//         { date: <Date Object>, description: 'Description 2', amount: 200 },
-//         { date: <Date Object>, description: 'Description 3', amount: 300 }
+//         { isDeposit: true, date: <Date Object>, description: 'Description 1', amount: 100 },
+//         { isDeposit: false, date: <Date Object>, description: 'Description 2', amount: 200 },
+//         { isDeposit: false, date: <Date Object>, description: 'Description 3', amount: 300 }
 //     ],
 //     balanceHistory: [
 //         { date: <Date Object>, balance: 950000 },
 //         { date: <Date Object>, balance: 980000 }
-//     ]
+//     ],
+//     description: 'This account is for for chocolate',
+//     accountType: 'asset' or 'liability'
 // }
 
+
+/**
+ * Creates a div for a new account.
+ * @param {string} accountName 
+ * @param {Number} balance 
+ * @param {string} lastUpdated 
+ * @param {Array<transaction>} transactions 
+ * @returns HTMLDivElement
+ */
 function createAccountPrototype(accountName, balance, lastUpdated, transactions) {
     // Create the main container
     const accountDiv = document.createElement('div');
     accountDiv.id = accountName;
     accountDiv.className = 'd-flex flex-column border border-dark';
-
 
     // Create the inner container
     const container = document.createElement('div');
@@ -116,11 +127,16 @@ function createAccountPrototype(accountName, balance, lastUpdated, transactions)
 }
 
 
+/**
+ * Adds a new account to the page and localStorage.
+ */
 function modalSaveAccount() {
     const accountName = document.getElementById('accountNameInput').value;
     const startingBalance = parseFloat(document.getElementById('startingBalanceInput').value);
     const accountType = document.getElementById('accountTypeInput').value;
     const isAsset = accountType === 'asset';
+
+    let accounts;
 
 
     if (accountName && !isNaN(startingBalance)) {

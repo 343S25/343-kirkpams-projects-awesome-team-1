@@ -23,10 +23,10 @@
 
   <header>
     <nav class="d-flex bg-secondary">
-      <a class="btn text-white" href="index.html">Home</a>
-      <button type="button" class="btn text-white" id="add-account" data-bs-toggle="modal"
+      <a class="text-white" href="index.html">Home</a>
+      <button type="button" class="text-white" id="add-account" data-bs-toggle="modal"
         data-bs-target="#addAccountModal">Add Account</button>
-      <a class="btn text-white" href="help.html">Help</a>
+      <a class="text-white" href="help.html">Help</a>
     </nav>
   </header>
 
@@ -119,6 +119,7 @@
 
   <!-- Initialization -->
   <script>
+    localStorage.clear(); // Temporary
     (function init() {
 
       document.getElementById('saveAccountButton').addEventListener('click', modalSaveAccount);

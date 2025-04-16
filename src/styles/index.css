@@ -8,3 +8,15 @@
     color: rgb(130, 130, 130);
     text-decoration: underline;
 }
+
+nav>a,
+nav>button {
+    font-size: 1.5rem;
+    text-decoration: none;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+nav>button {
+    background: none;
+    border: none;
+}
