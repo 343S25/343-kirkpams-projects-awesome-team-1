@@ -1,0 +1,10 @@
+.accountlink {
+    color: black;
+    text-decoration: none;
+
+}
+
+.accountlink:hover {
+    color: rgb(130, 130, 130);
+    text-decoration: underline;
+}
