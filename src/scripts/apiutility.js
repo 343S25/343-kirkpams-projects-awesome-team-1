@@ -8,7 +8,7 @@ function getStockQuote(symbol) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            // Do stuff with data
+            return data['Global Quote'];
         })
         .catch(error => console.error('Error fetching stock data:', error));
 }
