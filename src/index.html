@@ -67,16 +67,6 @@
     </div>
   </div>
 
-  <!-- Collapse example -->
-  <div class="card">
-    <h2 class="card-header" data-bs-toggle="collapse" href="#collapseList" aria-expanded="false"
-      aria-controls="collapseList">First List Group</h2>
-    <div class="collapse" id="collapseList">
-      <h1>Hi</h1>
-      <button type="button" id="add-item">+</button>
-    </div>
-  </div>
-
   <!-- Account modal -->
   <div class="modal fade" id="addAccountModal" aria-labelledby="addAccountModalLabel">
     <div class="modal-dialog">
@@ -88,17 +78,17 @@
         <div class="modal-body">
           <form id="addAccountForm">
             <div class="mb-3">
-              <label for="accountName" class="form-label">Account Name</label>
+              <label for="accountNameInput" class="form-label">Account Name</label>
               <input type="text" class="form-control" id="accountNameInput" placeholder="Enter account name" required>
             </div>
             <div class="mb-3">
-              <label for="startingBalance" class="form-label">Starting Balance</label>
+              <label for="startingBalanceInput" class="form-label">Starting Balance</label>
               <input type="number" class="form-control" id="startingBalanceInput" placeholder="Enter starting balance"
                 required>
             </div>
             <!-- Add an input that asks for the account type, asset or liability-->
             <div class="mb-3">
-              <label for="accountType" class="form-label">Account Type</label>
+              <label for="accountTypeInput" class="form-label">Account Type</label>
               <select class="form-select" id="accountTypeInput" required>
                 <option value="" disabled selected>Select account type</option>
                 <option value="asset">Asset</option>
@@ -118,66 +108,8 @@
   </div>
 
   <!-- Initialization -->
-  <script>
-    localStorage.clear(); // Temporary
-    (function init() {
+  <script src="scripts/init.js"></script>
 
-      document.getElementById('saveAccountButton').addEventListener('click', modalSaveAccount);
-
-
-    })();
-
-
-
-
-
-  </script>
-
-
-
-  <!-- Prototypes -->
-  <div id="accountPrototype" class="d-flex flex-column border border-dark d-none">
-    <div class="p-3 container">
-      <div class="row">
-        <div class="col">
-          <div class="d-flex justify-content-around">
-            <h1>Account Name 1</h1> <!--When clicked, show full breakdown-->
-            <h2 class="p-2">$1,000,000</h2>
-          </div>
-        </div>
-        <div class="col">
-          <h2>Last Updated: 4/9/2025</h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <img src="images/CS343_Project1_Sketch.pdf" alt="Graph">
-        </div>
-        <div class="col">
-          <h3>Transactions</h3>
-          <!-- Recent transaction grid (3 transactions)-->
-          <!-- Data    Description    Amount-->
-          <div class="container m-1">
-            <div class="row">
-              <div class="col border border-dark">Cell 1</div>
-              <div class="col-6 border border-dark">Cell 2</div>
-              <div class="col border border-dark">Cell 3</div>
-            </div>
-            <div class="row">
-              <div class="col border border-dark">Cell </div>
-              <div class="col-6 border border-dark">Cell 5</div>
-              <div class="col border border-dark">Cell 6</div>
-            </div>
-            <div class="row">
-              <div class="col border border-dark">Cell 7</div>
-              <div class="col-6 border border-dark">Cell 8</div>
-              <div class="col border border-dark">Cell 9</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 </body>
 

@@ -21,7 +21,7 @@
 //         { date: <Date Object>, balance: 980000 }
 //     ],
 //     description: 'This account is for for chocolate',
-//     accountType: 'asset' or 'liability'
+//     isAsset: 'asset' or 'liability'
 // }
 
 
@@ -34,87 +34,106 @@
  * @returns HTMLDivElement
  */
 function createAccountPrototype(accountName, balance, lastUpdated, transactions) {
+    // Account name for Ids and classes
+    let accountNameId = accountName.split(' ').join('-').toLowerCase();
+
     // Create the main container
     const accountDiv = document.createElement('div');
-    accountDiv.id = accountName;
-    accountDiv.className = 'd-flex flex-column border border-dark';
+    accountDiv.id = accountNameId;
+    accountDiv.className = 'card';
 
-    // Create the inner container
-    const container = document.createElement('div');
-    container.className = 'p-3 container';
-    accountDiv.appendChild(container);
+    // Create the card header
+    const cardHeader = document.createElement('div');
+    cardHeader.className = 'card-header d-flex justify-content-between align-items-center';
+    accountDiv.appendChild(cardHeader);
 
-    // Create the first row
-    const row1 = document.createElement('div');
-    row1.className = 'row';
-    container.appendChild(row1);
+    const accountInfo = document.createElement('div');
+    accountInfo.className = 'd-flex align-items-center';
+    cardHeader.appendChild(accountInfo);
+
+    const accountNameButton = document.createElement('button');
+    accountNameButton.textContent = accountName;
+    accountNameButton.className = 'h2 me-3 p-2 border-0 bg-transparent text-decoration-none';
+    accountNameButton.onmouseover = () => accountNameButton.classList.add('text-secondary')
+    accountNameButton.onmouseout = () => accountNameButton.classList.remove('text-secondary');
+
+    accountNameButton.onclick = () => {
+        window.location.href = `account.html?name=${accountNameId}`;
+    };
+    accountInfo.appendChild(accountNameButton);
+
+    const balanceElem = document.createElement('span');
+    balanceElem.textContent = `$${balance.toLocaleString()}`; // Format balance with commas
+    balanceElem.className = 'h2 me-3 p-3';
+    accountInfo.appendChild(balanceElem);
+
+
+    // Last updated text
+    const lastUpdatedElem = document.createElement('span');
+    lastUpdatedElem.textContent = `Last Updated: ${lastUpdated}`;
+    lastUpdatedElem.className = 'text-muted ms-auto p-3';
+    cardHeader.appendChild(lastUpdatedElem);
+
+    // Create the toggle button
+    const toggleButton = document.createElement('button');
+    toggleButton.className = 'btn btn-outline-secondary';
+    toggleButton.type = 'button';
+    toggleButton.setAttribute('data-bs-toggle', 'collapse');
+    toggleButton.setAttribute('data-bs-target', `#collapse-${accountNameId}`);
+    toggleButton.setAttribute('aria-expanded', 'false');
+    toggleButton.setAttribute('aria-controls', `collapse-${accountNameId}`);
+    toggleButton.innerHTML = '&#x25BC;'; // Down arrow
+    cardHeader.appendChild(toggleButton);
+
+    // Create the collapsible content
+    const collapseDiv = document.createElement('div');
+    collapseDiv.id = `collapse-${accountNameId}`;
+    collapseDiv.className = 'collapse';
+    accountDiv.appendChild(collapseDiv);
+
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+    collapseDiv.appendChild(cardBody);
+
+    // Create the second row with image and transactions
+    const row = document.createElement('div');
+    row.className = 'row';
+    cardBody.appendChild(row);
 
     const col1 = document.createElement('div');
     col1.className = 'col';
-    row1.appendChild(col1);
-
-    const accountInfo = document.createElement('div');
-    accountInfo.className = 'd-flex justify-content-around';
-    col1.appendChild(accountInfo);
-
-    const accountNameElem = document.createElement('button');
-    accountNameElem.type = 'button';
-    accountNameElem.textContent = accountName;
-    accountNameElem.className = 'acountlink h1';
-    accountInfo.appendChild(accountNameElem);
-
-    const balanceElem = document.createElement('h2');
-    balanceElem.className = 'p-2';
-    balanceElem.textContent = `$${balance.toLocaleString()}`;
-    accountInfo.appendChild(balanceElem);
-
-    const col2 = document.createElement('div');
-    col2.className = 'col';
-    row1.appendChild(col2);
-
-    const lastUpdatedElem = document.createElement('h2');
-    lastUpdatedElem.textContent = `Last Updated: ${lastUpdated}`;
-    col2.appendChild(lastUpdatedElem);
-
-    // Create the second row
-    const row2 = document.createElement('div');
-    row2.className = 'row';
-    container.appendChild(row2);
-
-    const col3 = document.createElement('div');
-    col3.className = 'col';
-    row2.appendChild(col3);
+    row.appendChild(col1);
 
     const graphImg = document.createElement('img');
     graphImg.src = 'images/CS343_Project1_Sketch.pdf';
     graphImg.alt = 'Graph';
-    col3.appendChild(graphImg);
+    graphImg.className = 'img-fluid';
+    col1.appendChild(graphImg);
 
-    const col4 = document.createElement('div');
-    col4.className = 'col';
-    row2.appendChild(col4);
+    const col2 = document.createElement('div');
+    col2.className = 'col';
+    row.appendChild(col2);
 
-    const transactionsHeader = document.createElement('h3');
-    transactionsHeader.textContent = 'Transactions';
-    col4.appendChild(transactionsHeader);
+    const transactionsHeader = document.createElement('h5');
+    transactionsHeader.textContent = 'Recent Transactions';
+    col2.appendChild(transactionsHeader);
 
-    // Create the transaction grid
     const transactionContainer = document.createElement('div');
-    transactionContainer.className = 'container m-1';
-    col4.appendChild(transactionContainer);
+    transactionContainer.className = 'container mt-2';
+    col2.appendChild(transactionContainer);
 
+    // Display transactions
     if (transactions.length === 0) {
         const noTransactions = document.createElement('div');
         noTransactions.textContent = 'No transactions available.';
         transactionContainer.appendChild(noTransactions);
     } else {
-        // Display the last 3 transactions
         transactions.slice(-3).forEach(transaction => {
             const transactionRow = document.createElement('div');
-            transactionRow.className = 'row';
+            transactionRow.className = 'row mb-1';
             transactionContainer.appendChild(transactionRow);
 
-            transaction.forEach(cell => {
+            Object.values(transaction).forEach(cell => {
                 const cellDiv = document.createElement('div');
                 cellDiv.className = 'col border border-dark';
                 cellDiv.textContent = cell;
@@ -122,6 +141,15 @@ function createAccountPrototype(accountName, balance, lastUpdated, transactions)
             });
         });
     }
+
+    // Toggle button arrow change on expand/collapse
+    collapseDiv.addEventListener('shown.bs.collapse', () => {
+        toggleButton.innerHTML = '&#x25B2;'; // Up arrow
+    });
+
+    collapseDiv.addEventListener('hidden.bs.collapse', () => {
+        toggleButton.innerHTML = '&#x25BC;'; // Down arrow
+    });
 
     return accountDiv;
 }
@@ -136,7 +164,7 @@ function modalSaveAccount() {
     const accountType = document.getElementById('accountTypeInput').value;
     const isAsset = accountType === 'asset';
 
-    let accounts;
+    let accounts = localStorage.getItem('accounts');
 
 
     if (accountName && !isNaN(startingBalance)) {
@@ -164,6 +192,23 @@ function modalSaveAccount() {
     } else {
         document.getElementById('addAccountWarning').textContent = 'Please fill in all fields correctly.';
     }
+
+    if (accounts) {
+        accounts = JSON.parse(accounts);
+    }
+    else {
+        accounts = [];
+    }
+
+    accounts.push({
+        accountName: accountName,
+        balance: startingBalance,
+        lastUpdated: new Date().toLocaleDateString(),
+        transactions: [],
+        isAsset: accountType
+    });
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    console.log('Accounts now:', accounts);
 }
 
 
