@@ -14,7 +14,8 @@
 
 // Account object
 // {
-//     accountName: 'Account Name 1',
+//     id: 'account-name-1',
+//     name: 'Account Name 1',
 //     balance: 1000000,
 //     lastUpdated: '4/16/2025'
 //     transactions: [
@@ -105,20 +106,22 @@ function createAccountPrototype(accountName, balance, lastUpdated, transactions)
     cardBody.className = 'card-body';
     collapseDiv.appendChild(cardBody);
 
-    // Create the second row with image and transactions
+    // Create the second row with transactions
     const row = document.createElement('div');
     row.className = 'row';
     cardBody.appendChild(row);
 
-    const col1 = document.createElement('div');
-    col1.className = 'col';
-    row.appendChild(col1);
 
-    const graphImg = document.createElement('img');
-    graphImg.src = 'images/CS343_Project1_Sketch.pdf';
-    graphImg.alt = 'Graph';
-    graphImg.className = 'img-fluid';
-    col1.appendChild(graphImg);
+    // I decided against keeping the graph, could at it in the future for more features
+    // const col1 = document.createElement('div');
+    // col1.className = 'col';
+    // row.appendChild(col1);
+
+    // const graphImg = document.createElement('img');
+    // graphImg.src = 'temporary-graph.png';
+    // graphImg.alt = 'Graph';
+    // graphImg.className = 'img-fluid';
+    // col1.appendChild(graphImg);
 
     const col2 = document.createElement('div');
     col2.className = 'col';
@@ -177,7 +180,7 @@ function modalSaveAccount() {
     let accounts = localStorage.getItem('accounts');
 
 
-    if (accountName && !isNaN(startingBalance)) {
+    if (accountName && !isNaN(startingBalance) && startingBalance >= 0 && accountType) {
         // Example transactions array (empty for a new account)
         const transactions = [];
 
@@ -210,8 +213,11 @@ function modalSaveAccount() {
         accounts = [];
     }
 
+    let id = accountName.split(' ').join('-').toLowerCase();
+
     accounts.push({
-        accountName: accountName,
+        id: id,
+        name: accountName,
         balance: startingBalance,
         lastUpdated: new Date().toLocaleDateString(),
         transactions: [],
@@ -222,5 +228,59 @@ function modalSaveAccount() {
 }
 
 
-// const accountNode = createAccountPrototype('Account Name 1', 1000000, '4/9/2025', transactions);
-// document.getElementById('assetsPrototype').appendChild(accountNode);
+/**
+ * Add transaction to account
+ * @param {string} accountNameId - Id of the account to add transaction to
+ */
+function addTransaction(accountName) {
+    let transactionType = document.getElementById('transactionType').value;
+    transactionType = transactionType === 'deposit';
+    let amount = parseFloat(document.getElementById('transactionAmount').value);
+    let description = document.getElementById('transactionDescription').value;
+    let date = document.getElementById('transactionDate').value;
+    let accounts = localStorage.getItem('accounts');
+
+    // Transaction button should not be functional if no account is there.
+    accounts = JSON.parse(accounts);
+    let accountNameId = accountName.split(' ').join('-').toLowerCase();
+    let account = accounts.find(account => account.id === accountNameId);
+    console.log(account);
+    if (!account) {
+        document.getElementById('addTransactionWarning').textContent = 'No account found.';
+        return;
+    }
+
+    if (amount > 0 && description && date) {
+        let transaction = {
+            isDeposit: transactionType,
+            amount: amount,
+            description: description,
+            date: date
+        }
+        account.transactions.push(transaction);
+        account.balance += transactionType ? amount : -amount;
+        account.lastUpdated = new Date().toLocaleDateString();
+        localStorage.setItem('accounts', JSON.stringify(accounts));
+        document.getElementById('addTransactionWarning').textContent = '';
+    }
+    else {
+        document.getElementById('addTransactionWarning').textContent = 'Please fill in all fields correctly.';
+        return;
+    }
+
+}
+
+
+/**
+ * Add stock to account
+ * @param {string} accountName - Id of the account to add stock to
+ */
+function addStock(accountName) {
+    let ticker = document.getElementById('stockSymbol').value;
+    let shares = parseFloat(document.getElementById('stockQuantity').value);
+    getStockQuote(ticker).then(quote => {
+        console.log(quote);
+    })
+
+    // TODO
+}

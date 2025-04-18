@@ -7,10 +7,10 @@ function displayLocalStorageData() {
         let liabilityDiv = document.getElementById('liabilityAccountDiv');
         accounts.forEach(account => {
             if (account.isAsset) {
-                assetDiv.appendChild(createAccountPrototype(account.accountName, account.balance, account.lastUpdated, account.transactions));
+                assetDiv.appendChild(createAccountPrototype(account.name, account.balance, account.lastUpdated, account.transactions));
             }
             else {
-                liabilityDiv.appendChild(createAccountPrototype(account.accountName, account.balance, account.lastUpdated, account.transactions));
+                liabilityDiv.appendChild(createAccountPrototype(account.name, account.balance, account.lastUpdated, account.transactions));
             }
         });
     }
@@ -20,7 +20,11 @@ function displayLocalStorageData() {
 // Initialization
 (function () {
     // localStorage.clear(); // For testing
-    document.getElementById('saveAccountButton').addEventListener('click', modalSaveAccount);
+    document.getElementById('saveAccountButton').addEventListener('click', function (event) {
+        event.preventDefault();
+        modalSaveAccount();
+    });
+
     displayLocalStorageData();
 
 })();
