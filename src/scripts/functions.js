@@ -6,6 +6,12 @@
 //     isDeposit: true
 // }
 
+// Stock object
+// {
+//     ticker: 'AAPL',
+//     shares: 10,
+// }
+
 // Account object
 // {
 //     accountName: 'Account Name 1',
@@ -19,6 +25,10 @@
 //     balanceHistory: [
 //         { date: <Date Object>, balance: 950000 },
 //         { date: <Date Object>, balance: 980000 }
+//     ],
+//     stocks: [
+//         { ticker: 'AAPL', shares: 10 },
+//         { ticker: 'GOOGL', shares: 5 }
 //     ],
 //     description: 'This account is for for chocolate',
 //     isAsset: 'asset' or 'liability'

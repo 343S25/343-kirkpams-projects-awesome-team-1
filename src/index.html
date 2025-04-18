@@ -32,8 +32,8 @@
 
 
 
-  <div class="d-flex m-5">
-    <div class="flex-grow-1 m-3"> <!-- Left column-->
+  <div class="d-flex flex-row-reverse flex-sm-column-reverse flex-lg-row m-5">
+    <div class="flex-grow-1 m-3"> <!--Accounts-->
       <div id="assetsPrototype">
         <h1 class="bg-secondary text-white border border-dark p-2 mt-3">Assets</h1>
         <div id="assetAccountDiv"></div>
@@ -42,10 +42,13 @@
         <div id="liabilityAccountDiv"></div>
       </div>
     </div>
-    <div class="flex-grow-2 m-3"> <!-- Right column content -->
-      <div class="container d-flex justify-content-center align-items-center mt-3">
-        <div>
-          <div class="border border-dark rounded-top text-center p-3">
+    <div class="flex-grow-2 m-3"> <!-- At a glance -->
+      <div class="container d-flex flex-sm-column justify-content-center align-items-center mt-3">
+        <div class="text-center p-3 d-lg-none">
+          <h2>At A Glance</h2>
+        </div>
+        <div class="d-flex flex-sm-row flex-lg-column">
+          <div class="border border-dark text-center p-3 d-sm-none">
             <h2>At A Glance</h2>
           </div>
           <div class="d-flex flex-column justify-content-between text-center border border-dark p-3">
@@ -56,7 +59,7 @@
             <h3>This Year:</h3>
             <h3 id="thisYearText">$123,456</h3>
           </div>
-          <div class="d-flex flex-column justify-content-between  text-center  border border-dark p-3 rounded-bottom">
+          <div class="d-flex flex-column justify-content-between  text-center  border border-dark p-3">
             <h3>This Month:</h3>
             <h3 id="thisMonthText">$23,456</h3>
           </div>
