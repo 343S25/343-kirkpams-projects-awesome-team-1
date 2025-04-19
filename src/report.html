@@ -10,38 +10,189 @@
 
 <body>
     <h1>Report for Milestone 2</h1>
+    <h2>Preface: To see some of the features, you will have to go to the home page and add an account. From there, you
+        can click on the account name to go to the account page. On the account page you can add a transaction or a
+        stock. The stock is where the API is used. Add transaction functions and displays new transactions on the home
+        page.</h2>
     <h2>Overall Requirements</h2>
     <ol>
-        <li>Git repository: Personal</li>
-        <li>Published site at <a href="https://w3stu.cs.jmu.edu/makelajr/cs343/project"
-                alt="Link to project page for Josh Makela">https://w3stu.cs.jmu.edu/makelajr/cs343/project</a></li>
-        <li>Supports distinct layouts for sm and lg in Bootstrap.</li>
-        <li>Site contains at least 2 pages with a relavant purpose. Pages link together through nav/account names</li>
-        <li>Site has a header (the nav)</li>
-        <li>Nav is at the top</li>
-        <li>Site includes graph images for balance history</li>
-        <li>Site validates with Nu HTML Checker and WAVE Accessibility evaluator</li>
-        <li>Includes two font faces (Account name is ... and other text is ...)</li>
-        <li>Site includes a form with add account</li>
-        <li>External links to helpful information in help tab</li>
-        <li>Site makes network requests to calculate real time value of stocks in accounts</li>
+        <li>You must use the git repository your professor created for the project.<ul>
+                <li>Done.</li>
+            </ul>
+        </li>
+        <li>You must publish the site to the <code>w3.cs.jmu.edu</code> server.<ul>
+                <li>Done. Find at <a
+                        href="https://w3stu.cs.jmu.edu/makelajr/cs343/project/help.html">https://w3stu.cs.jmu.edu/makelajr/cs343/project/help.html</a>
+                </li>
+            </ul>
+        </li>
+        <li>Your site must support distinct layouts for large and small screens using media queries. Use comments to
+            note where you completed this requirement.<ul>
+                <li>My site uses Bootstrap breakpoints small (&geq;576px) and large (&geq;992px) Though changes
+                    are
+                    minor, they are there. For example, on screens between 576 and 991 pixels, the "At a Glance" section
+                    on index.html moves form the side to the top. As I add more features, I will create more responsive
+                    designs.</li>
+            </ul>
+        </li>
+        <li>Your site must contain at least five separate pages, each having a meaningful purpose. The main page must be
+            named <code>index.html</code>. Your pages must link to each other in a logical and meaningful way.
+            <ul>
+                <li>Though there is only 3 base pages, each serve distinct purposes and some take on multiple roles. For
+                    example, the account page will allow you to manage transactions and balances. There are also modals
+                    for forms.</li>
+            </ul>
+        </li>
+        <li>Your site must include some sort of header.
+            <ul>
+                <li>
+                    Done.
+                </li>
+            </ul>
+        </li>
+        <li>Your site must include some sort of navigation links.
+            <ul>
+                <li>Done. The header includes nav links to the home page and help page.</li>
+            </ul>
+        </li>
+        <li>Your site must include images, and their <code>alt</code> attributes must adequately describe the image
+            content to users of screen readers, users with images disabled, and web crawlers.
+            <ul>
+                <li>
+                    An image is present on the help page with alt text. More images may be added after this milestone,
+                    but there is
+                    really no need for images. I could possibly add them as icons.
+                </li>
+            </ul>
+        </li>
+        <li>Each page and stylesheet of your site must validate without any warnings or errors using the <a
+                href="https://validator.w3.org/nu/">Nu HTML Checker</a> and <a href="https://wave.webaim.org/">WAVE
+                Accessibility</a> evaluator.
+            <ul>
+                <li>
+                    Tested and validated.
+                </li>
+            </ul>
+        </li>
+        <li>Your site must use at least two different font faces. For example, headings are often rendered in a
+            sans-serif font, and paragraphs in a serif font.</li>
+        <li>Your site must include at least one form. The form need not do anything at this point, but it must be
+            present. Like all content, it must be neatly aligned.
+            <ul>
+                <li>Forms are found in multiple different modals after pressing "Add Account", or when in an account on
+                    an account.html, "Add Transaction" or "Add Stock"</li>
+            </ul>
+        </li>
+        <li>Your site must include links to external sites.
+            <ul>
+                <li>Satisfied on help page. Seems unncessary though.</li>
+            </ul>
+        </li>
+        <li>You site must make at least two network requests (using <code>fetch()</code>) to an external API. The
+            resulting data must be processed and rendered in a meaningful way.
+            <ul>
+                <li>
+                    The Add Stock button calls a function that fetches stcok data from the Alpha Vantage API. Right now,
+                    it is just being logged in the console (Dr. Stewart you said it was ok to do this), but will be used
+                    later to calculate total value of an account. This can be "done" twice for two separate stocks.
+                    Hopefully this is enough. If not, I am already planning to add a search bar for ticker symbols in
+                    our next milestone.
+                </li>
+            </ul>
+        </li>
     </ol>
+
     <h2>Professional Practices</h2>
     <ol>
-        <li>VS Code formats my code by default.</li>
-        <li>Code is organized into images, styles, scripts, and design (see script links)</li>
-        <li>Aesthetic is simple for the purpose of being unassuming and unintimidating for users that are first starting
-            budgeting.</li>
-        <li>Style is coherent across pages. Style rules are determined by Bootstrap classes.</li>
-        <li>Content is neatly aligned.</li>
-        <li>Content has sufficient and consistent spacing.</li>
-        <li>Source code is readable and uses meaningful names for classes/IDs, and standard naming convention for
-            identifiers.</li>
-        <li>Source code uses alt and ARIA features appropriately.</li>
-        <li>File names are entirely lowercase and only alphanumeric characters.</li>
-        <li>Comments are meaningful and helpful for understanding.</li>
-
+        <li>Your source code must be formatted using a consistent standard. We recommend using the built-in support in
+            VS Code for formatting HTML and CSS (other options like <em>Prettier</em> may not default to producing valid
+            HTML).
+            <ul>
+                <li>I used VS Code auto formatter.</li>
+            </ul>
+        </li>
+        <li>Your site's non-HTML resources must be organized:<ul>
+                <li>Images should be placed in a directory named <code>images</code>.</li>
+                <li>CSS files should be placed in a directory named <code>styles</code>.</li>
+                <li>JS files should be placed in a directory named <code>scripts</code>.</li>
+                <li>Design sketch files should in a directory named <code>design</code>.</li>
+            </ul>
+            <ul>
+                <li>Done. Check source.</li>
+            </ul>
+        </li>
+        <li>Your interface must demonstrate good aesthetics, including good choices for color schemes, layout (using
+            grids and/or flexboxes, along with non-static positions), and dynamic effects.
+            <ul>
+                <li>The site is simple yes, but it is consistent with Bootstrap colors and has an intuitive design.</li>
+            </ul>
+        </li>
+        <li>Your site must maintain a coherent style across its pages. Repeated style rules must be placed in a shared
+            external stylesheet. Style rules not shared between pages must be placed in separate external stylesheets.
+            <ul>
+                <li>
+                    Dealt with using Bootstrap and a shared style sheet for the header.
+                </li>
+            </ul>
+        </li>
+        <li>The content should be neatly aligned. The axes of alignment should be clearly visible. Favor left- and
+            right-alignment over centering—as centering does not produce a strong axis of alignment.
+            <ul>
+                <li>Done.</li>
+            </ul>
+        </li>
+        <li>The content should have adequate and consistent spacing. Text should not overflow the surrounding box.
+            <ul>
+                <li>Done.</li>
+            </ul>
+        </li>
+        <li>Your source code must be readable, using conventional and consistent formatting and meaningful names for
+            classes and IDs. Use kebab-case (preferred) or camelCase identifiers.<ul>
+                <li>My formatter keeps me honest. I used camelCase.</li>
+            </ul>
+        </li>
+        <li>Your source code should use semantic and structural elements to support accessible usage. You should also
+            use ARIA features as appropriate. In particular, you must adhere to the Level A recommendations in the <a
+                href="https://www.w3.org/WAI/WCAG22/quickref/">WCAG Checklist</a>.
+            <ul>
+                <li>Done.</li>
+            </ul>
+        </li>
+        <li>The names of your files must be entirely lowercase and contain only alphanumeric characters.
+            <ul>
+                <li>Done.</li>
+            </ul>
+        </li>
+        <li>You should write meaningful comments.
+            <ul>
+                <li>Done. Using JSDoc formats for functions, and interspersed comments in HTML and JS functions.</li>
+            </ul>
+        </li>
     </ol>
+
+
+
 </body>
+
+<style>
+    ol {
+        font-size: 1.4em;
+        margin-left: 2em;
+        margin-right: 2em;
+        color: rgb(87, 86, 86);
+    }
+
+    ul {
+        padding: 0.5em;
+    }
+
+    ul>li {
+        color: black;
+    }
+
+    body {
+        background-color: rgb(247, 247, 247);
+    }
+</style>
 
 </html>

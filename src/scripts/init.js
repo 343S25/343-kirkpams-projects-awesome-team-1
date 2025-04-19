@@ -1,4 +1,4 @@
-// Searches localStorage for accounts and display them if they exist.
+/** Searches localStorage for accounts and display them if they exist.*/
 function displayLocalStorageData() {
     let accounts = localStorage.getItem('accounts');
     if (accounts) {
