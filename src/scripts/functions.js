@@ -127,8 +127,9 @@ function createAccountPrototype(accountName, balance, lastUpdated, transactions)
     col2.className = 'col';
     row.appendChild(col2);
 
-    const transactionsHeader = document.createElement('h5');
+    const transactionsHeader = document.createElement('p');
     transactionsHeader.textContent = 'Recent Transactions';
+    transactionsHeader.className = 'h5';
     col2.appendChild(transactionsHeader);
 
     const transactionContainer = document.createElement('div');
