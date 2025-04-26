@@ -1,5 +1,6 @@
 // Transactions object
 // {
+//     id: 0,
 //     date: <Date Object>,
 //     description: 'Description 1',
 //     amount: 100
@@ -9,7 +10,8 @@
 // Stock object
 // {
 //     ticker: 'AAPL',
-//     shares: 10,
+//     quantity: 10,
+//     lastCalculatedPrice: 150.00,
 // }
 
 // Account object
