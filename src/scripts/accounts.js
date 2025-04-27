@@ -15,6 +15,28 @@ function retotalBalance(account) {
     return;
 }
 
+/** Creates the tr node that contains information given the transaction object
+ * @param {Object} transaction - The transaction object containing details of the transaction
+ */
+function createTransactionHTML(transaction) {
+    let tbody = document.querySelector('tbody');
+    let transactionPrototype = document.getElementById('transactionPrototype');
+    let transactionRow = transactionPrototype.cloneNode(true);
+    transactionRow.removeAttribute('id');
+    transactionRow.classList.remove('d-none');
+    let childTds = transactionRow.querySelectorAll('td');
+
+    // Fill in transaction details
+    childTds[0].textContent = transaction.isDeposit ? 'Deposit' : 'Withdrawal';
+    childTds[1].textContent = transaction.date;
+    childTds[2].textContent = transaction.description;
+    childTds[3].textContent = `$${transaction.amount.toLocaleString()}`; // Format amount with commas
+
+    return transactionRow;
+}
+
+
+
 function deleteTransaction(account, transaction) {
     account.transcations = account.transcations.filter(t => t.id !== transaction.id);
     retotalAccount(account);

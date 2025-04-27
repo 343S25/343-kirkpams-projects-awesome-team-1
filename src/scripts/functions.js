@@ -46,7 +46,7 @@
  * @param {Array<transaction>} transactions 
  * @returns HTMLDivElement
  */
-function createAccountPrototype(accountName, balance, lastUpdated, transactions) {
+function createAccountHTML(accountName, balance, lastUpdated, transactions) {
     // Account name for Ids and classes
     let accountNameId = accountName.split(' ').join('-').toLowerCase();
 
@@ -175,20 +175,20 @@ function createAccountPrototype(accountName, balance, lastUpdated, transactions)
  * Adds a new account to the page and localStorage.
  */
 function modalSaveAccount() {
-    const accountName = document.getElementById('accountNameInput').value;
-    const startingBalance = parseFloat(document.getElementById('startingBalanceInput').value);
-    const accountType = document.getElementById('accountTypeInput').value;
-    const isAsset = accountType === 'asset';
+    let accountName = document.getElementById('accountNameInput').value;
+    let startingBalance = parseFloat(document.getElementById('startingBalanceInput').value);
+    let accountType = document.getElementById('accountTypeInput').value;
+    let isAsset = accountType === 'asset';
 
     let accounts = localStorage.getItem('accounts');
 
 
     if (accountName && !isNaN(startingBalance) && startingBalance >= 0 && accountType) {
         // Example transactions array (empty for a new account)
-        const transactions = [];
+        let transactions = [];
 
         // Create the new account node
-        const accountNode = createAccountPrototype(accountName, startingBalance, new Date().toLocaleDateString(), transactions);
+        let accountNode = createAccountHTML(accountName, startingBalance, new Date().toLocaleDateString(), transactions);
 
         // Add new account to corresponding div
         if (isAsset) {
@@ -198,7 +198,7 @@ function modalSaveAccount() {
         }
 
         // Close the modal
-        const addAccountModal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
+        let addAccountModal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
         addAccountModal.hide();
 
         // Clear the form
@@ -224,7 +224,8 @@ function modalSaveAccount() {
         balance: startingBalance,
         lastUpdated: new Date().toLocaleDateString(),
         transactions: [],
-        isAsset: accountType
+        isAsset: isAsset,
+        stocks: [],
     });
     localStorage.setItem('accounts', JSON.stringify(accounts));
     console.log('Accounts now:', accounts);
@@ -232,18 +233,18 @@ function modalSaveAccount() {
 
 
 /**
- * Add transaction to account
+ * Add transaction to account object, display on page, and update balance.
  * @param {string} accountNameId - Id of the account to add transaction to
  */
 function addTransaction(accountName) {
     let transactionType = document.getElementById('transactionType').value;
-    transactionType = transactionType === 'deposit';
+    transactionType = transactionType === 'Deposit';
     let amount = parseFloat(document.getElementById('transactionAmount').value);
     let description = document.getElementById('transactionDescription').value;
     let date = document.getElementById('transactionDate').value;
     let accounts = localStorage.getItem('accounts');
 
-    // Transaction button should not be functional if no account is there.
+    // Assuming transaction button should not be functional if no account is there.
     accounts = JSON.parse(accounts);
     let accountNameId = accountName.split(' ').join('-').toLowerCase();
     let account = accounts.find(account => account.id === accountNameId);
@@ -253,23 +254,27 @@ function addTransaction(accountName) {
         return;
     }
 
-    if (amount > 0 && description && date) {
-        let transaction = {
-            isDeposit: transactionType,
-            amount: amount,
-            description: description,
-            date: date
-        }
-        account.transactions.push(transaction);
-        account.balance += transactionType ? amount : -amount;
-        account.lastUpdated = new Date().toLocaleDateString();
-        localStorage.setItem('accounts', JSON.stringify(accounts));
-        document.getElementById('addTransactionWarning').textContent = '';
-    }
-    else {
+    if (amount <= 0 || !description || !date) {
         document.getElementById('addTransactionWarning').textContent = 'Please fill in all fields correctly.';
         return;
     }
+    let transaction = {
+        isDeposit: transactionType,
+        amount: amount,
+        description: description,
+        date: date
+    }
+    account.transactions.push(transaction);
+    account.balance += transactionType ? amount : -amount;
+    account.lastUpdated = new Date().toLocaleDateString();
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    document.getElementById('addTransactionWarning').textContent = '';
+
+    // Create table row and add to tbody
+    let tbody = document.querySelector('tbody');
+    let transactionRow = createTransactionHTML(transaction);
+
+    tbody.appendChild(transactionRow);
 
 }
 
