@@ -11,7 +11,7 @@
 // {
 //     ticker: 'AAPL',
 //     quantity: 10,
-//     lastCalculatedPrice: 150.00,
+//     quote: 15.00,
 // }
 
 // Account object
@@ -229,66 +229,4 @@ function modalSaveAccount() {
     });
     localStorage.setItem('accounts', JSON.stringify(accounts));
     console.log('Accounts now:', accounts);
-}
-
-
-/**
- * Add transaction to account object, display on page, and update balance.
- * @param {string} accountNameId - Id of the account to add transaction to
- */
-function addTransaction(accountName) {
-    let transactionType = document.getElementById('transactionType').value;
-    transactionType = transactionType === 'Deposit';
-    let amount = parseFloat(document.getElementById('transactionAmount').value);
-    let description = document.getElementById('transactionDescription').value;
-    let date = document.getElementById('transactionDate').value;
-    let accounts = localStorage.getItem('accounts');
-
-    // Assuming transaction button should not be functional if no account is there.
-    accounts = JSON.parse(accounts);
-    let accountNameId = accountName.split(' ').join('-').toLowerCase();
-    let account = accounts.find(account => account.id === accountNameId);
-    console.log(account);
-    if (!account) {
-        document.getElementById('addTransactionWarning').textContent = 'No account found.';
-        return;
-    }
-
-    if (amount <= 0 || !description || !date) {
-        document.getElementById('addTransactionWarning').textContent = 'Please fill in all fields correctly.';
-        return;
-    }
-    let transaction = {
-        isDeposit: transactionType,
-        amount: amount,
-        description: description,
-        date: date
-    }
-    account.transactions.push(transaction);
-    account.balance += transactionType ? amount : -amount;
-    account.lastUpdated = new Date().toLocaleDateString();
-    localStorage.setItem('accounts', JSON.stringify(accounts));
-    document.getElementById('addTransactionWarning').textContent = '';
-
-    // Create table row and add to tbody
-    let tbody = document.querySelector('tbody');
-    let transactionRow = createTransactionHTML(transaction);
-
-    tbody.appendChild(transactionRow);
-
-}
-
-
-/**
- * Add stock to account
- * @param {string} accountName - Id of the account to add stock to
- */
-function addStock(accountName) {
-    let ticker = document.getElementById('stockSymbol').value;
-    let shares = parseFloat(document.getElementById('stockQuantity').value);
-    getStockQuote(ticker).then(quote => {
-        console.log(quote);
-    })
-
-    // TODO
 }
