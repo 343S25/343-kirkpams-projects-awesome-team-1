@@ -29,6 +29,8 @@
           <button type="button" class="text-white" id="add-account" data-bs-toggle="modal"
             data-bs-target="#addAccountModal">Add Account</button>
           <a class="text-white" href="help.html">Help</a>
+          <button type="button" class="text-white" id="changeData" data-bs-toggle="modal"
+            data-bs-target="#changeDataModal">Change Data</button>
 
         </nav>
       </div>
@@ -103,12 +105,43 @@
                 <option value="liability">Liability</option>
               </select>
             </div>
+            <div class="mb-3">
+              <label for="accountDescriptionInput" class="form-label">Account Description</label>
+              <textarea class="form-control" id="accountDescriptionInput" rows="3"
+                placeholder="Enter account description"></textarea>
+            </div>
             <p class="text-danger" id="addAccountWarning"></p>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
           <button type="submit" class="btn btn-primary" id="saveAccountButton">Save Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import/Export/Clear Modal-->
+  <div class="modal fade" id="changeDataModal" tabindex="-1" aria-labelledby="changeDataModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary text-white">
+          <h4 class="modal-title" id="changeDataModalLabel">Import/Export/Clear Data</h4>
+        </div>
+        <div class="modal-body">
+          <form id="changeDataForm">
+            <div class="mb-3">
+              <label for="importFileInput" class="form-label">Import File</label>
+              <input type="file" class="form-control" id="importFileInput" accept=".json">
+            </div>
+            <button type="button" class="btn btn-primary mb-2" id="importButton">Import Data</button>
+            <button type="button" class="btn btn-secondary mb-2" id="exportButton">Export Data</button>
+            <button type="button" class="btn btn-danger mb-2" id="clearDataButton">Clear All Data</button>
+          </form>
+          <p class="text-danger" id="changeDataWarning"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="importExportClose" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

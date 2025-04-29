@@ -7,6 +7,16 @@ function displayFullAccount(account) {
         let transactionRow = createTransactionHTML(transaction);
         tbody.appendChild(transactionRow);
     })
+
+    let typeElem = document.getElementById('accountType');
+    let balanceElem = document.getElementById('balance');
+    let lastUpdatedElem = document.getElementById('lastUpdated');
+    let description = document.getElementById('description');
+
+    typeElem.textContent = account.isAsset ? 'Type: Asset' : 'Type: Liability';
+    balanceElem.textContent = `Balance: $${account.balance.toLocaleString()}`; // Format balance with commas
+    lastUpdatedElem.textContent = `Last Updated: ${account.lastUpdated}`;
+    description.textContent = `Description: ${account.description}`;
 }
 
 

@@ -179,6 +179,7 @@ function modalSaveAccount() {
     let startingBalance = parseFloat(document.getElementById('startingBalanceInput').value);
     let accountType = document.getElementById('accountTypeInput').value;
     let isAsset = accountType === 'asset';
+    let description = document.getElementById('accountDescriptionInput').value;
 
     let accounts = localStorage.getItem('accounts');
 
@@ -226,7 +227,91 @@ function modalSaveAccount() {
         transactions: [],
         isAsset: isAsset,
         stocks: [],
+        description: description,
     });
     localStorage.setItem('accounts', JSON.stringify(accounts));
     console.log('Accounts now:', accounts);
+}
+
+/** Calculates net worth then displays in the net worth element */
+function displayNetWorth() {
+    let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+    let netWorth = 0;
+
+    accounts.forEach(account => {
+        if (account.isAsset) {
+            netWorth += account.balance;
+        } else {
+            netWorth -= account.balance;
+        }
+    });
+
+    let netWorthElem = document.getElementById('netWorthText');
+    netWorthElem.textContent = `$${netWorth.toLocaleString()}`; // Format with commas
+}
+
+/** 
+ * Export localStorage data to a JSON file.
+ */
+function exportData() {
+    let accounts = localStorage.getItem('accounts');
+    if (!accounts) {
+        let warning = document.getElementById('changeDataWarning');
+        warning.textContent = 'No data to export.';
+        return;
+    }
+
+    accounts = JSON.parse(accounts);
+    let dataStr = JSON.stringify(accounts, null, 2); // Pretty print with 2 spaces
+    let blob = new Blob([dataStr], { type: 'application/json' });
+    let url = URL.createObjectURL(blob);
+
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = 'accounts.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+/**
+ * Imports data from a JSON file into localStorage.
+ */
+function importData() {
+    let warning = document.getElementById('changeDataWarning');
+
+    let files = document.getElementById('importFileInput').files;
+    if (files.length === 0 || files.length > 1) {
+        let warning = document.getElementById('changeDataWarning');
+        warning.textContent = 'Please select one file to import.';
+        return;
+    }
+
+    let file = files[0];
+    console.log(file);
+    console.log(file.type);
+    if (file.type !== 'application/json') {
+        warning.textContent = 'Please select a JSON file.';
+        return;
+    }
+
+    let reader = new FileReader();
+    reader.onload = function () {
+        try {
+            let data = JSON.parse(reader.result);
+            localStorage.setItem('accounts', JSON.stringify(data));
+            let closeButton = document.getElementById('importExportClose');
+            closeButton.click();
+            displayLocalStorageData(); // Refresh the display
+        } catch (error) {
+            warning.textContent = 'Error importing data: ' + error.message;
+        }
+    };
+
+    reader.onerror = function () {
+        warning.textContent = 'Error reading file: ' + reader.error.message;
+    }
+
+    reader.readAsText(file);
 }

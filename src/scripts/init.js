@@ -14,6 +14,8 @@ function displayLocalStorageData() {
             }
         });
     }
+
+    displayNetWorth();
 }
 
 
@@ -23,7 +25,25 @@ function displayLocalStorageData() {
     document.getElementById('saveAccountButton').addEventListener('click', function (event) {
         event.preventDefault();
         modalSaveAccount();
+        displayNetWorth();
     });
+
+    document.getElementById('importButton').addEventListener('click', function (event) {
+        event.preventDefault();
+        importData();
+    }
+    );
+
+    document.getElementById('exportButton').addEventListener('click', function (event) {
+        exportData();
+    });
+
+    document.getElementById('clearDataButton').addEventListener('click', function (event) {
+        localStorage.clear();
+        displayLocalStorageData();
+    });
+
+
 
     displayLocalStorageData();
 
