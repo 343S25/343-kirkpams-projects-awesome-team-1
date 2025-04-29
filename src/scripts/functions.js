@@ -231,6 +231,9 @@ function modalSaveAccount() {
     });
     localStorage.setItem('accounts', JSON.stringify(accounts));
     console.log('Accounts now:', accounts);
+
+    let close = document.getElementById('saveAccountClose');
+    close.click(); // Close the modal after saving
 }
 
 /** Calculates net worth then displays in the net worth element */
@@ -248,6 +251,49 @@ function displayNetWorth() {
 
     let netWorthElem = document.getElementById('netWorthText');
     netWorthElem.textContent = `$${netWorth.toLocaleString()}`; // Format with commas
+}
+
+/**
+ * Calculate all transaction changes for the current month and display in the #thisMonthText element.
+ */
+function displayThisMonth() {
+    let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+    let thisMonth = new Date().getMonth();
+    let thisYear = new Date().getFullYear();
+    let thisMonthTotal = 0;
+
+    accounts.forEach(account => {
+        account.transactions.forEach(transaction => {
+            let transactionDate = new Date(transaction.date);
+            if (transactionDate.getMonth() === thisMonth && transactionDate.getFullYear() === thisYear) {
+                thisMonthTotal += transaction.isDeposit ? transaction.amount : -transaction.amount;
+            }
+        });
+    });
+
+    let thisMonthElem = document.getElementById('thisMonthText');
+    thisMonthElem.textContent = `$${thisMonthTotal.toLocaleString()}`; // Format with commas
+}
+
+/**
+ * Calculate all transaction changes for the current year and display in the #thisYearText element.
+ */
+function displayThisYear() {
+    let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+    let thisYear = new Date().getFullYear();
+    let thisYearTotal = 0;
+
+    accounts.forEach(account => {
+        account.transactions.forEach(transaction => {
+            let transactionDate = new Date(transaction.date);
+            if (transactionDate.getFullYear() === thisYear) {
+                thisYearTotal += transaction.isDeposit ? transaction.amount : -transaction.amount;
+            }
+        });
+    });
+
+    let thisYearElem = document.getElementById('thisYearText');
+    thisYearElem.textContent = `$${thisYearTotal.toLocaleString()}`; // Format with commas
 }
 
 /** 

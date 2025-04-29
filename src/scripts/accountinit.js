@@ -8,6 +8,12 @@ function displayFullAccount(account) {
         tbody.appendChild(transactionRow);
     })
 
+    let stockTbody = document.querySelectorAll('tbody')[1];
+    account.stocks.forEach(stock => {
+        let stockRow = createStockHTML(stock);
+        stockTbody.appendChild(stockRow);
+    });
+
     let typeElem = document.getElementById('accountType');
     let balanceElem = document.getElementById('balance');
     let lastUpdatedElem = document.getElementById('lastUpdated');
@@ -16,7 +22,12 @@ function displayFullAccount(account) {
     typeElem.textContent = account.isAsset ? 'Type: Asset' : 'Type: Liability';
     balanceElem.textContent = `Balance: $${account.balance.toLocaleString()}`; // Format balance with commas
     lastUpdatedElem.textContent = `Last Updated: ${account.lastUpdated}`;
+    if (account.description === undefined) {
+        account.description = 'No description provided.';
+    }
     description.textContent = `Description: ${account.description}`;
+
+
 }
 
 
@@ -54,6 +65,7 @@ function displayFullAccount(account) {
     });
 
     document.getElementById('addStockButton').addEventListener('click', function (event) {
+        event.preventDefault();
         addStock(accountNameId);
     });
 

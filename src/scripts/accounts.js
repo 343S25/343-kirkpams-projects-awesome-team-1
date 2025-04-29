@@ -50,6 +50,8 @@ function createStockHTML(stock) {
     childTds[1].textContent = stock.quantity;
     childTds[2].textContent = `$${stock.quote.toLocaleString()}`; // Format amount with commas
     childTds[3].textContent = `$${(stock.quantity * stock.quote).toLocaleString()}`; // Format amount with commas
+
+    return stockRow;
 }
 
 /**
@@ -96,6 +98,9 @@ function addTransaction(accountName) {
 
     tbody.appendChild(transactionRow);
 
+    let close = document.getElementById('transactionClose');
+    close.click();
+
 }
 
 /**
@@ -103,15 +108,45 @@ function addTransaction(accountName) {
  * @param {string} accountName - Id of the account to add stock to
  */
 function addStock(accountName) {
+    let accounts = localStorage.getItem('accounts');
+    accounts = JSON.parse(accounts);
+    let accountNameId = accountName.split(' ').join('-').toLowerCase();
+    let account = accounts.find(account => account.id === accountNameId);
+    if (!account) {
+        return;
+    }
+
     let ticker = document.getElementById('stockSymbol').value;
     let shares = parseFloat(document.getElementById('stockQuantity').value);
     getStockQuote(ticker)
         .then(quote => {
             console.log(quote);
+            let stock = {
+                ticker: ticker,
+                quantity: shares,
+                quote: parseFloat(quote['05. price']),
+            }
+
+            let existingStock = account.stocks.find(stock => stock.ticker === ticker);
+            if (existingStock) {
+                existingStock.quantity += shares;
+                existingStock.quote = stock.quote; // Update the quote to the latest
+            } else {
+                account.stocks.push(stock);
+            }
+
+            account.lastUpdated = new Date().toLocaleDateString();
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+            document.getElementById('addStockWarning').textContent = '';
+
+            let tbody = document.querySelectorAll('tbody')[1]; // Stocks instead of transactions
+            let stockRow = createStockHTML(stock);
+            tbody.appendChild(stockRow);
+
         })
-        .catch(error => {
-            console.error('Error fetching stock data:', error);
-        });
+    //.catch(error => {
+    //    console.error('Error fetching stock data:', error);
+    //});
 }
 
 

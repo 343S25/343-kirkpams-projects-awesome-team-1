@@ -94,6 +94,7 @@
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Current Price</th>
                                 <th scope="col">Value</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -156,7 +157,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    <button type="button" class="btn btn-secondary" id="transactionClose" data-bs-dismiss="modal"
                         aria-label="Close">Close</button>
                     <button type="submit" class="btn btn-primary" form="transactionForm" id="addTransactionButton">Add
                         Transaction</button>
@@ -184,6 +185,7 @@
                             <input type="number" class="form-control" id="stockQuantity" placeholder="Enter quantity"
                                 required>
                         </div>
+                        <p class="text-danger" id="addStockWarning"></p>
                     </form>
                 </div>
                 <div class="modal-footer">

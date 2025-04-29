@@ -16,6 +16,8 @@ function displayLocalStorageData() {
     }
 
     displayNetWorth();
+    displayThisMonth();
+    displayThisYear();
 }
 
 
@@ -40,7 +42,8 @@ function displayLocalStorageData() {
 
     document.getElementById('clearDataButton').addEventListener('click', function (event) {
         localStorage.clear();
-        displayLocalStorageData();
+        // Refresh page
+        location.reload();
     });
 
 
