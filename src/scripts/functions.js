@@ -145,10 +145,11 @@ function createAccountHTML(accountName, balance, lastUpdated, transactions) {
         transactionContainer.appendChild(noTransactions);
     } else {
         const table = document.createElement('table');
-        table.className = 'table table-bordered';
+        table.className = 'table table-bordered table-striped';
         transactionContainer.appendChild(table);
 
         const thead = document.createElement('thead');
+        thead.className = 'table-secondary';
         table.appendChild(thead);
 
         const headerRow = document.createElement('tr');
