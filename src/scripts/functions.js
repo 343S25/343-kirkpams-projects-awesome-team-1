@@ -144,17 +144,30 @@ function createAccountHTML(accountName, balance, lastUpdated, transactions) {
         noTransactions.textContent = 'No transactions available.';
         transactionContainer.appendChild(noTransactions);
     } else {
-        transactions.slice(-3).forEach(transaction => {
-            const transactionRow = document.createElement('div');
-            transactionRow.className = 'row mb-1';
-            transactionContainer.appendChild(transactionRow);
+        const table = document.createElement('table');
+        table.className = 'table table-bordered';
+        transactionContainer.appendChild(table);
 
-            Object.values(transaction).forEach(cell => {
-                const cellDiv = document.createElement('div');
-                cellDiv.className = 'col border border-dark';
-                cellDiv.textContent = cell;
-                transactionRow.appendChild(cellDiv);
-            });
+        const thead = document.createElement('thead');
+        table.appendChild(thead);
+
+        const headerRow = document.createElement('tr');
+        thead.appendChild(headerRow);
+
+        // Add table headers
+        ['Type', 'Date', 'Description', 'Amount'].forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+        });
+
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        // Add transaction rows
+        transactions.slice(-3).forEach(transaction => {
+            let transactionRow = createTransactionHTML(transaction);
+            tbody.appendChild(transactionRow);
         });
     }
 
@@ -175,6 +188,8 @@ function createAccountHTML(accountName, balance, lastUpdated, transactions) {
  * Adds a new account to the page and localStorage.
  */
 function modalSaveAccount() {
+    let warning = document.getElementById('addAccountWarning');
+
     let accountName = document.getElementById('accountNameInput').value;
     let startingBalance = parseFloat(document.getElementById('startingBalanceInput').value);
     let accountType = document.getElementById('accountTypeInput').value;
@@ -182,6 +197,20 @@ function modalSaveAccount() {
     let description = document.getElementById('accountDescriptionInput').value;
 
     let accounts = localStorage.getItem('accounts');
+    if (accounts) {
+        accounts = JSON.parse(accounts);
+    }
+    else {
+        accounts = [];
+    }
+
+
+    for (let i = 0; i < accounts.length; i++) {
+        if (accounts[i].name.toLowerCase() === accountName.toLowerCase()) {
+            warning.textContent = 'An account with this name already exists.';
+            return;
+        }
+    }
 
 
     if (accountName && !isNaN(startingBalance) && startingBalance >= 0 && accountType) {
@@ -204,17 +233,11 @@ function modalSaveAccount() {
 
         // Clear the form
         document.getElementById('addAccountForm').reset();
-        document.getElementById('addAccountWarning').textContent = '';
+        warning.textContent = '';
 
     } else {
-        document.getElementById('addAccountWarning').textContent = 'Please fill in all fields correctly.';
-    }
-
-    if (accounts) {
-        accounts = JSON.parse(accounts);
-    }
-    else {
-        accounts = [];
+        warning.textContent = 'Please fill in all fields correctly.';
+        return;
     }
 
     let id = accountName.split(' ').join('-').toLowerCase();
@@ -360,4 +383,23 @@ function importData() {
     }
 
     reader.readAsText(file);
+}
+
+
+/** Sort transactions in account by date */
+function reorderTransactions(accountName) {
+    let accounts = localStorage.getItem('accounts');
+    accounts = JSON.parse(accounts);
+    let accountNameId = accountName.split(' ').join('-').toLowerCase();
+    let account = accounts.find(account => account.id === accountNameId);
+    if (!account) {
+        return;
+    }
+
+    // Sort transactions by date
+    account.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    console.log("Sorted transactions:", account.transactions);
+
+    // Update localStorage
+    localStorage.setItem('accounts', JSON.stringify(accounts));
 }

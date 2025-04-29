@@ -37,7 +37,7 @@
         <div class="container my-5">
             <div class="card">
                 <div class="card-header bg-secondary text-white">
-                    <h1>Account Name</h1>
+                    <h1 id="accountName">Account Name</h1>
                 </div>
                 <div class="card-body">
                     <h2 id="accountType" class="card-text">Type: Asset</h2>
@@ -68,13 +68,6 @@
                                 <td>Amount</td>
                                 <td><button type="button" class="btn btn-danger btn-sm">Edit</button></td>
                             </tr>
-                            <tr>
-                                <td>Deposit</td>
-                                <td>2025-09-25</td>
-                                <td>Salary Payment and some more words to show wrapping of text</td>
-                                <td>$5,000.00</td>
-                                <td><button type="button" class="btn btn-danger btn-sm">Delete</button></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -84,7 +77,7 @@
             </div>
 
 
-            <div class="mt-4">
+            <div id="stocksDiv" class="mt-4">
                 <h3>Stocks</h3>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
@@ -105,19 +98,13 @@
                                 <td>Value</td>
                                 <td><button type="button" class="btn btn-danger btn-sm">Edit</button></td>
                             </tr>
-                            <tr>
-                                <td>AAPL</td>
-                                <td>50</td>
-                                <td>$150.00</td>
-                                <td>$7,500.00</td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStockModal">Add
+                    Stock</button>
             </div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStockModal">Add
-                Stock</button>
+
 
 
         </div>
@@ -189,7 +176,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    <button type="button" class="btn btn-secondary" id="closeStockButton" data-bs-dismiss="modal"
                         aria-label="Close">Close</button>
                     <button type="submit" class="btn btn-primary" form="stockForm" id="addStockButton">Add
                         Stock</button>

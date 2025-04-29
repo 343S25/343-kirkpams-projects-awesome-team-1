@@ -10,7 +10,7 @@ function retotalBalance(account) {
     });
 
     account.stocks.forEach(stock => {
-        account.balance += (stock.quantity * stock.lastCalculatedPrice);
+        account.balance += (stock.quantity * stock.quote);
     });
     return;
 }
@@ -112,15 +112,25 @@ function addStock(accountName) {
     accounts = JSON.parse(accounts);
     let accountNameId = accountName.split(' ').join('-').toLowerCase();
     let account = accounts.find(account => account.id === accountNameId);
+    let warning = document.getElementById('addStockWarning');
     if (!account) {
         return;
     }
 
-    let ticker = document.getElementById('stockSymbol').value;
+    let ticker = document.getElementById('stockSymbol').value.toUpperCase().trim();
     let shares = parseFloat(document.getElementById('stockQuantity').value);
+    if (shares <= 0) {
+        warning.textContent = 'Please enter a valid number of shares.';
+        return;
+    }
+
     getStockQuote(ticker)
         .then(quote => {
-            console.log(quote);
+            if (Object.keys(quote).length === 0) {
+                warning.textContent = 'Invalid stock ticker.';
+                return;
+            }
+
             let stock = {
                 ticker: ticker,
                 quantity: shares,
@@ -131,17 +141,22 @@ function addStock(accountName) {
             if (existingStock) {
                 existingStock.quantity += shares;
                 existingStock.quote = stock.quote; // Update the quote to the latest
+                location.reload();
             } else {
                 account.stocks.push(stock);
+                let tbody = document.querySelectorAll('tbody')[1]; // Stocks instead of transactions
+                let stockRow = createStockHTML(stock);
+                tbody.appendChild(stockRow);
             }
 
             account.lastUpdated = new Date().toLocaleDateString();
             localStorage.setItem('accounts', JSON.stringify(accounts));
-            document.getElementById('addStockWarning').textContent = '';
-
-            let tbody = document.querySelectorAll('tbody')[1]; // Stocks instead of transactions
-            let stockRow = createStockHTML(stock);
-            tbody.appendChild(stockRow);
+            warning.textContent = '';
+            document.getElementById('stockSymbol').value = '';
+            document.getElementById('stockQuantity').value = 0;
+            account.lastUpdated = new Date().toLocaleDateString();
+            let close = document.getElementById('closeStockButton');
+            close.click();
 
         })
     //.catch(error => {

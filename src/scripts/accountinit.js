@@ -2,6 +2,11 @@
  * @param {Object} account - The account object containing transactions and stocks
  */
 function displayFullAccount(account) {
+    if (!account.isAsset) {
+        let stocksDiv = document.getElementById('stocksDiv');
+        stocksDiv.classList.add('d-none'); // Hide stocks section for liabilities
+    }
+
     let tbody = document.querySelector('tbody');
     account.transactions.forEach(transaction => {
         let transactionRow = createTransactionHTML(transaction);
@@ -10,15 +15,21 @@ function displayFullAccount(account) {
 
     let stockTbody = document.querySelectorAll('tbody')[1];
     account.stocks.forEach(stock => {
-        let stockRow = createStockHTML(stock);
-        stockTbody.appendChild(stockRow);
+        getStockQuote(stock.ticker).then(quote => {
+            console.log(quote);
+            stock.quote = quote['05. price']; // Update stock quote with fetched data
+            let stockRow = createStockHTML(stock);
+            stockTbody.appendChild(stockRow);
+        });
     });
 
+    let accountNameElem = document.getElementById('accountName');
     let typeElem = document.getElementById('accountType');
     let balanceElem = document.getElementById('balance');
     let lastUpdatedElem = document.getElementById('lastUpdated');
     let description = document.getElementById('description');
 
+    accountNameElem.textContent = account.name;
     typeElem.textContent = account.isAsset ? 'Type: Asset' : 'Type: Liability';
     balanceElem.textContent = `Balance: $${account.balance.toLocaleString()}`; // Format balance with commas
     lastUpdatedElem.textContent = `Last Updated: ${account.lastUpdated}`;
@@ -53,6 +64,9 @@ function displayFullAccount(account) {
         document.querySelector('body').innerHTML = '<h1>Account not found</h1>';
         return;
     }
+
+    // Order transactions
+    reorderTransactions(accountNameId);
 
     // Create HTML for account
     displayFullAccount(account);
