@@ -98,6 +98,12 @@ function addTransaction(accountName) {
 
     tbody.appendChild(transactionRow);
 
+
+    // Clear input fields
+    document.getElementById('transactionAmount').value = 0;
+    document.getElementById('transactionDescription').value = '';
+    document.getElementById('transactionDate').value = '';
+    document.getElementById('transactionType').value = 'Deposit';
     let close = document.getElementById('transactionClose');
     close.click();
 
@@ -119,7 +125,7 @@ function addStock(accountName) {
 
     let ticker = document.getElementById('stockSymbol').value.toUpperCase().trim();
     let shares = parseFloat(document.getElementById('stockQuantity').value);
-    if (shares <= 0) {
+    if (shares <= 0 || isNaN(shares)) {
         warning.textContent = 'Please enter a valid number of shares.';
         return;
     }
@@ -157,11 +163,12 @@ function addStock(accountName) {
             account.lastUpdated = new Date().toLocaleDateString();
             let close = document.getElementById('closeStockButton');
             close.click();
+            retotalBalance(account);
 
         })
-    //.catch(error => {
-    //    console.error('Error fetching stock data:', error);
-    //});
+        .catch(error => {
+            console.error('Error fetching stock data:', error);
+        });
 }
 
 
