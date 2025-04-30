@@ -184,6 +184,67 @@ function createAccountHTML(accountName, balance, lastUpdated, transactions) {
     return accountDiv;
 }
 
+function createAccountHTML2(accountName, balance, lastUpdated, transactions) {
+    let accountNameId = accountName.split(' ').join('-').toLowerCase();
+    // Clonse the account prototype
+    let accountDiv = document.getElementById('accountPrototype').cloneNode(true);
+    accountDiv.id = accountNameId;
+    accountDiv.classList.remove('d-none'); // Remove the hidden class
+
+    // Account button
+    let nameButton = accountDiv.querySelector('.accountName');
+    nameButton.textContent = accountName; // Set the account name
+    nameButton.id = accountNameId + '-name'; // Set the id for the name button
+    nameButton.onclick = () => {
+        window.location.href = `account.html?name=${accountNameId}`;
+    };
+    nameButton.onmouseover = () => nameButton.classList.add('text-secondary')
+    nameButton.onmouseout = () => nameButton.classList.remove('text-secondary');
+
+    // Balance
+    let balanceElem = accountDiv.querySelector('.accountBalance');
+    balanceElem.textContent = `$${balance.toLocaleString()}`; // Format balance with commas
+    balanceElem.id = accountNameId + '-balance'; // Set the id for the balance element
+
+    // Last updated
+    let lastUpdatedElem = accountDiv.querySelector('.accountLastUpdated');
+    lastUpdatedElem.textContent = `Last Updated: ${lastUpdated}`;
+    lastUpdatedElem.id = accountNameId + '-last-updated'; // Set the id for the last updated element
+
+    // Change expand button target
+    let expandButton = accountDiv.querySelector('.expandButton');
+    expandButton.setAttribute('data-bs-target', `#collapse-${accountNameId}`);
+    expandButton.setAttribute('aria-controls', `collapse-${accountNameId}`);
+
+    let collapseDiv = accountDiv.querySelector('.collapse-accountPrototype');
+    collapseDiv.id = `collapse-${accountNameId}`; // Set the id for the collapse div
+
+
+    // Create the transactions table
+    let tbody = collapseDiv.querySelector('tbody');
+
+    if (transactions.length === 0) {
+    }
+    else {
+        // Add transaction rows
+        transactions.slice(-3).forEach(transaction => {
+            let transactionRow = createTransactionHTML(transaction);
+            tbody.appendChild(transactionRow);
+        });
+    }
+
+    // Toggle button arrow change on expand/collapse
+    collapseDiv.addEventListener('shown.bs.collapse', () => {
+        expandButton.innerHTML = '&#x25B2;'; // Up arrow
+    });
+
+    collapseDiv.addEventListener('hidden.bs.collapse', () => {
+        expandButton.innerHTML = '&#x25BC;'; // Down arrow
+    });
+
+    return accountDiv;
+}
+
 
 /**
  * Adds a new account to the page and localStorage.

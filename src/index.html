@@ -43,9 +43,54 @@
     <!-- At a glance moves to the top on smaller screens -->
     <div class="d-flex flex-column-reverse flex-sm-column-reverse flex-lg-row m-5">
       <div class="flex-grow-1 m-3"> <!--Accounts-->
-        <div id="assetsPrototype">
+        <div id="accounts">
           <h1 class="bg-secondary text-white border border-dark p-2 mt-3">Assets</h1>
-          <div id="assetAccountDiv"></div>
+          <div id="assetAccountDiv">
+            <div id="accountPrototype" class="card d-none">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <button type="button"
+                    class="h2 me-3 p-2 border-0 bg-transparent text-decoration-none accountName">Account
+                    Name</button>
+                  <span class="h2 me-3 p-3 accountBalance">$1,234</span>
+                </div>
+                <span class="text-muted ms-auto p-3 accountLastUpdated">Last Updated: 4/29/2025</span>
+                <button class="btn btn-outline-secondary expandButton" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapse-accountPrototype" aria-expanded="false"
+                  aria-controls="collapse-accountPrototype">▼</button>
+              </div>
+              <div class="collapse collapse-accountPrototype" id="collapse-accountPrototype">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <p class="h5">Recent Transactions</p>
+                      <div class="container mt-2">
+                        <table class="table table-bordered table-striped">
+                          <thead class="table-secondary">
+                            <tr>
+                              <th scope="col">Type</th>
+                              <th scope="col">Date</th>
+                              <th scope="col" class="d-none d-sm-block">Description</th>
+                              <th scope="col">Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr id="transactionPrototype" class="d-none">
+                              <td>Deposit/Withdrawal</td>
+                              <td>Date</td>
+                              <td class="d-none d-sm-block">Description</td>
+                              <td>Amount</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
 
           <h1 class="bg-secondary text-white border border-dark p-2 mt-3">Liabilities</h1>
           <div id="liabilityAccountDiv"></div>
@@ -79,17 +124,6 @@
       </div>
     </div>
   </main>
-
-  <table class="d-none table table-bordered table-striped" aria-hidden="true">
-    <tbody>
-      <tr id="transactionPrototype" class="d-none">
-        <td>Deposit/Withdrawal</td>
-        <td>Date</td>
-        <td>Description</td>
-        <td>Amount</td>
-      </tr>
-    </tbody>
-  </table>
 
   <!-- Account modal -->
   <div class="modal fade" id="addAccountModal" aria-labelledby="addAccountModalLabel">
