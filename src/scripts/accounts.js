@@ -24,12 +24,19 @@ function createTransactionHTML(transaction) {
     transactionRow.removeAttribute('id');
     transactionRow.classList.remove('d-none');
     let childTds = transactionRow.querySelectorAll('td');
-
+    console.log(childTds);
     // Fill in transaction details
     childTds[0].textContent = transaction.isDeposit ? 'Deposit' : 'Withdrawal';
     childTds[1].textContent = transaction.date;
     childTds[2].textContent = transaction.description;
     childTds[3].textContent = `$${transaction.amount.toLocaleString()}`; // Format amount with commas
+
+    // Only happens on account page
+    if (childTds.length > 4) {
+        childTds[4].querySelector('button').addEventListener('click', () => {
+            fillTransactionEditModal(transaction);
+        });
+    }
 
     return transactionRow;
 }
@@ -80,7 +87,9 @@ function addTransaction(accountName) {
         document.getElementById('addTransactionWarning').textContent = 'Please fill in all fields correctly.';
         return;
     }
+
     let transaction = {
+        dateCreated: new Date(),
         isDeposit: transactionType,
         amount: amount,
         description: description,
@@ -172,13 +181,41 @@ function addStock(accountName) {
 }
 
 
+function fillTransactionEditModal(transaction) {
+    let transactionType = document.getElementById('editTransactionType');
+    let transactionAmount = document.getElementById('editTransactionAmount');
+    let transactionDescription = document.getElementById('editTransactionDescription');
+    let transactionDate = document.getElementById('editTransactionDate');
+
+    transactionType.value = transaction.isDeposit ? 'Deposit' : 'Withdrawal';
+    transactionAmount.value = transaction.amount;
+    transactionDescription.value = transaction.description;
+    transactionDate.value = transaction.date;
+}
+
+function fillAccountEditModal(account) {
+    let accountName = document.getElementById('editAccountName');
+    let description = document.getElementById('editAccountDescription');
+
+    accountName.value = account.name;
+    description.value = account.description || '';
+}
+
 
 function deleteTransaction(account, transaction) {
-    account.transcations = account.transcations.filter(t => t.id !== transaction.id);
+    account.transactions = account.transactions.filter(t => t.dateCreated !== transaction.dateCreated);
     retotalAccount(account);
 }
 
 function deleteStock(account, stockTicker) {
     account.stocks = account.stocks.filter(stock => stock.ticker !== stockTicker);
     retotalAccount(account);
+}
+
+function deleteAccount(account) {
+    let accounts = localStorage.getItem('accounts');
+    accounts = JSON.parse(accounts);
+    accounts = accounts.filter(acc => acc.id !== account.id);
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    window.location.href = 'index.html';
 }

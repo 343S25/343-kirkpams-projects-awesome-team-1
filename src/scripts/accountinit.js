@@ -73,6 +73,8 @@ function displayFullAccount(account) {
 
     document.querySelector('title').textContent = `${account.name}`;
 
+
+    // Add button event listeners
     document.getElementById('addTransactionButton').addEventListener('click', function (event) {
         event.preventDefault();
         addTransaction(accountNameId);
@@ -81,6 +83,31 @@ function displayFullAccount(account) {
     document.getElementById('addStockButton').addEventListener('click', function (event) {
         event.preventDefault();
         addStock(accountNameId);
+    });
+
+
+    // Edit button event listener
+    document.getElementById('editAccountButton').addEventListener('click', function (event) {
+        fillAccountEditModal(account);
+    });
+
+    document.getElementById('saveEditAccountButton').addEventListener('click', function (event) {
+        let newName = document.getElementById('editAccountName').value;
+        let newDescription = document.getElementById('editAccountDescription').value;
+
+        account.id = newName.split(' ').join('-').toLowerCase(); // Update account ID based on new name
+        account.name = newName;
+        account.description = newDescription;
+        account.lastUpdated = new Date().toLocaleDateString();
+
+        localStorage.setItem('accounts', JSON.stringify(accounts));
+        location.href = `account.html?name=${account.id}`; // Redirect to updated account page
+    });
+
+
+    // Delete account button
+    document.getElementById('confirmDeleteAccountButton').addEventListener('click', function (event) {
+        deleteAccount(account);
     });
 
 })();

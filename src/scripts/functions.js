@@ -1,7 +1,7 @@
 // Transactions object
 // {
-//     id: 0,
-//     date: <Date Object>,
+//     dateCreated: <Date Object>,
+//     date: '2025-04-16',
 //     description: 'Description 1',
 //     amount: 100
 //     isDeposit: true
