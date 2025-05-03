@@ -1,19 +1,6 @@
-function retotalBalance(account) {
-    account.transactions.forEach(transaction => {
-        account.balance = 0;
-
-        if (transaction.isDeposit) {
-            account.balance += transaction.amount;
-        } else {
-            account.balance -= transaction.amount;
-        }
-    });
-
-    account.stocks.forEach(stock => {
-        account.balance += (stock.quantity * stock.quote);
-    });
-    return;
-}
+/**
+ * This file contains functions to handle account management, including creating, editing, and deleting accounts and transactions.
+ */
 
 /** Creates the tr node that contains information given the transaction object
  * @param {Object} transaction - The transaction object containing details of the transaction
@@ -120,8 +107,8 @@ function addTransaction(accountName) {
 }
 
 /**
- * Add stock to account
- * @param {string} accountName - Id of the account to add stock to
+ * Add stock to account with accountName as its name.
+ * @param {string} accountName - Name of the account to add stock to
  */
 function addStock(accountName) {
     let accounts = localStorage.getItem('accounts');
@@ -190,6 +177,10 @@ function addStock(accountName) {
 }
 
 
+/**
+ * Fill the transaction edit modal with the transaction information.
+ * @param {Object} transaction 
+ */
 function fillTransactionEditModal(transaction) {
     let transactionType = document.getElementById('editTransactionType');
     let transactionAmount = document.getElementById('editTransactionAmount');
@@ -206,6 +197,10 @@ function fillTransactionEditModal(transaction) {
     dateCreated.textContent = JSON.stringify(transaction.dateCreated);
 }
 
+/**
+ * Fill the account edit modal with the account information.
+ * @param {Object} account 
+ */
 function fillAccountEditModal(account) {
     let accountName = document.getElementById('editAccountName');
     let description = document.getElementById('editAccountDescription');
@@ -214,6 +209,11 @@ function fillAccountEditModal(account) {
     description.value = account.description || '';
 }
 
+
+/**
+ * FIll the stock edit modal with the stock information.
+ * @param {Object} stock 
+ */
 function fillStockEditModal(stock) {
     let stockSymbol = document.getElementById('editStockSymbol');
     let stockQuantity = document.getElementById('editStockQuantity');
@@ -222,6 +222,11 @@ function fillStockEditModal(stock) {
     stockQuantity.value = stock.quantity;
 }
 
+/**
+ * Saves the modified transaction to the account and updates localStorage.
+ * @param {Object} account 
+ * @param {Object} accounts 
+ */
 function saveTransaction(account, accounts) {
 
 
@@ -249,6 +254,11 @@ function saveTransaction(account, accounts) {
     location.reload();
 }
 
+/**
+ * Saves the modified stock to the account and updates localStorage.
+ * @param {Object} account 
+ * @param {Object} accounts 
+ */
 function saveStock(account, accounts) {
     let stockTicker = document.getElementById('editStockSymbol').textContent;
     let stockQuantity = parseFloat(document.getElementById('editStockQuantity').value);
@@ -298,6 +308,10 @@ function deleteAccount(account) {
     window.location.href = 'index.html';
 }
 
+/**
+ * Recalculate the balance of the account based on its transactions and stocks.
+ * @param {Object} account 
+ */
 function retotalBalance(account) {
     let accounts = localStorage.getItem('accounts');
     accounts = JSON.parse(accounts);
@@ -317,4 +331,56 @@ function retotalBalance(account) {
     });
 
     localStorage.setItem('accounts', JSON.stringify(accounts));
+}
+
+
+function generateLineChart(account) {
+    let ctx = document.getElementById('balanceChart').getContext('2d');
+    let transactions = account.transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+    let labels = [];
+    let data = [];
+    let balance = 0;
+
+    transactions.forEach(transaction => {
+        balance += transaction.isDeposit ? transaction.amount : -transaction.amount;
+        labels.push(transaction.date);
+        data.push(balance);
+    });
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Account Balance Over Time',
+                data: data,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Balance'
+                    }
+                }
+            }
+        }
+    });
 }

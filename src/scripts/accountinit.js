@@ -2,15 +2,15 @@
  * @param {Object} account - The account object containing transactions and stocks
  */
 function displayFullAccount(account) {
+    document.querySelector('title').textContent = `${account.name}`;
+
     if (!account.isAsset) {
         let stocksDiv = document.getElementById('stocksDiv');
         stocksDiv.classList.add('d-none'); // Hide stocks section for liabilities
         let transactionTypeInput1 = document.querySelectorAll('select[name="transactionType"]');
         let transactionTypeInput2 = document.querySelectorAll('select[name="editTransactionType"]');
-        console.log(transactionTypeInputs);
-        transactionTypeInputs.forEach(select => {
-            select.innerHTML = '<option value="Deposit" selected>Deposit</option>';
-        });
+        transactionTypeInput1.innerHTML = '<option value="Deposit" selected>Deposit</option>';
+        transactionTypeInput2.innerHTML = '<option value="Deposit" selected>Deposit</option>';
     }
 
     let tbody = document.querySelector('tbody');
@@ -47,6 +47,7 @@ function displayFullAccount(account) {
 }
 
 
+// Initialization function
 (function () {
     // Set max date for all date inputs to today
     // let today = new Date();
@@ -80,8 +81,6 @@ function displayFullAccount(account) {
         return;
     }
 
-    // If account is liability
-
     // Order transactions
     reorderTransactions(accountNameId);
     retotalBalance(account);
@@ -89,7 +88,8 @@ function displayFullAccount(account) {
     // Create HTML for account
     displayFullAccount(account);
 
-    document.querySelector('title').textContent = `${account.name}`;
+    // Generate line chart
+    generateLineChart(account);
 
 
     // Add button event listeners
@@ -103,12 +103,11 @@ function displayFullAccount(account) {
         addStock(accountNameId);
     });
 
-
-    // Edit button event listener
     document.getElementById('editAccountButton').addEventListener('click', function (event) {
         fillAccountEditModal(account);
     });
 
+    // Save edit account
     document.getElementById('saveEditAccountButton').addEventListener('click', function (event) {
         saveAccount(account, accounts);
     });

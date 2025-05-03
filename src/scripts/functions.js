@@ -46,144 +46,6 @@
  * @param {Array<transaction>} transactions 
  * @returns HTMLDivElement
  */
-function createAccountHTML(accountName, balance, lastUpdated, transactions) {
-    // Account name for Ids and classes
-    let accountNameId = accountName.split(' ').join('-').toLowerCase();
-
-    // Create the main container
-    const accountDiv = document.createElement('div');
-    accountDiv.id = accountNameId;
-    accountDiv.className = 'card';
-
-    // Create the card header
-    const cardHeader = document.createElement('div');
-    cardHeader.className = 'card-header d-flex justify-content-between align-items-center';
-    accountDiv.appendChild(cardHeader);
-
-    const accountInfo = document.createElement('div');
-    accountInfo.className = 'd-flex align-items-center';
-    cardHeader.appendChild(accountInfo);
-
-    const accountNameButton = document.createElement('button');
-    accountNameButton.textContent = accountName;
-    accountNameButton.className = 'h2 me-3 p-2 border-0 bg-transparent text-decoration-none';
-    accountNameButton.onmouseover = () => accountNameButton.classList.add('text-secondary')
-    accountNameButton.onmouseout = () => accountNameButton.classList.remove('text-secondary');
-
-    accountNameButton.onclick = () => {
-        window.location.href = `account.html?name=${accountNameId}`;
-    };
-    accountInfo.appendChild(accountNameButton);
-
-    const balanceElem = document.createElement('span');
-    balanceElem.textContent = `$${balance.toLocaleString()}`; // Format balance with commas
-    balanceElem.className = 'h2 me-3 p-3';
-    accountInfo.appendChild(balanceElem);
-
-
-    // Last updated text
-    const lastUpdatedElem = document.createElement('span');
-    lastUpdatedElem.textContent = `Last Updated: ${lastUpdated}`;
-    lastUpdatedElem.className = 'text-muted ms-auto p-3';
-    cardHeader.appendChild(lastUpdatedElem);
-
-    // Create the toggle button
-    const toggleButton = document.createElement('button');
-    toggleButton.className = 'btn btn-outline-secondary';
-    toggleButton.type = 'button';
-    toggleButton.setAttribute('data-bs-toggle', 'collapse');
-    toggleButton.setAttribute('data-bs-target', `#collapse-${accountNameId}`);
-    toggleButton.setAttribute('aria-expanded', 'false');
-    toggleButton.setAttribute('aria-controls', `collapse-${accountNameId}`);
-    toggleButton.innerHTML = '&#x25BC;'; // Down arrow
-    cardHeader.appendChild(toggleButton);
-
-    // Create the collapsible content
-    const collapseDiv = document.createElement('div');
-    collapseDiv.id = `collapse-${accountNameId}`;
-    collapseDiv.className = 'collapse';
-    accountDiv.appendChild(collapseDiv);
-
-    const cardBody = document.createElement('div');
-    cardBody.className = 'card-body';
-    collapseDiv.appendChild(cardBody);
-
-    // Create the second row with transactions
-    const row = document.createElement('div');
-    row.className = 'row';
-    cardBody.appendChild(row);
-
-
-    // I decided against keeping the graph, could at it in the future for more features
-    // const col1 = document.createElement('div');
-    // col1.className = 'col';
-    // row.appendChild(col1);
-
-    // const graphImg = document.createElement('img');
-    // graphImg.src = 'temporary-graph.png';
-    // graphImg.alt = 'Graph';
-    // graphImg.className = 'img-fluid';
-    // col1.appendChild(graphImg);
-
-    const col2 = document.createElement('div');
-    col2.className = 'col';
-    row.appendChild(col2);
-
-    const transactionsHeader = document.createElement('p');
-    transactionsHeader.textContent = 'Recent Transactions';
-    transactionsHeader.className = 'h5';
-    col2.appendChild(transactionsHeader);
-
-    const transactionContainer = document.createElement('div');
-    transactionContainer.className = 'container mt-2';
-    col2.appendChild(transactionContainer);
-
-    // Display transactions
-    if (transactions.length === 0) {
-        const noTransactions = document.createElement('div');
-        noTransactions.textContent = 'No transactions available.';
-        transactionContainer.appendChild(noTransactions);
-    } else {
-        const table = document.createElement('table');
-        table.className = 'table table-bordered table-striped';
-        transactionContainer.appendChild(table);
-
-        const thead = document.createElement('thead');
-        thead.className = 'table-secondary';
-        table.appendChild(thead);
-
-        const headerRow = document.createElement('tr');
-        thead.appendChild(headerRow);
-
-        // Add table headers
-        ['Type', 'Date', 'Description', 'Amount'].forEach(headerText => {
-            const th = document.createElement('th');
-            th.textContent = headerText;
-            headerRow.appendChild(th);
-        });
-
-        const tbody = document.createElement('tbody');
-        table.appendChild(tbody);
-
-        // Add transaction rows
-        transactions.slice(-3).forEach(transaction => {
-            let transactionRow = createTransactionHTML(transaction);
-            tbody.appendChild(transactionRow);
-        });
-    }
-
-    // Toggle button arrow change on expand/collapse
-    collapseDiv.addEventListener('shown.bs.collapse', () => {
-        toggleButton.innerHTML = '&#x25B2;'; // Up arrow
-    });
-
-    collapseDiv.addEventListener('hidden.bs.collapse', () => {
-        toggleButton.innerHTML = '&#x25BC;'; // Down arrow
-    });
-
-    return accountDiv;
-}
-
 function createAccountHTML2(accountName, balance, lastUpdated, transactions) {
     let accountNameId = accountName.split(' ').join('-').toLowerCase();
     // Clonse the account prototype
@@ -203,7 +65,11 @@ function createAccountHTML2(accountName, balance, lastUpdated, transactions) {
 
     // Balance
     let balanceElem = accountDiv.querySelector('.accountBalance');
-    balanceElem.textContent = `$${balance.toLocaleString()}`; // Format balance with commas
+    if (balance < 0) {
+        balanceElem.textContent = `-$${Math.abs(balance).toLocaleString()}`; // Format negative balance with commas
+    } else {
+        balanceElem.textContent = `$${balance.toLocaleString()}`; // Format balance with commas
+    }
     balanceElem.id = accountNameId + '-balance'; // Set the id for the balance element
 
     // Last updated
@@ -227,7 +93,7 @@ function createAccountHTML2(accountName, balance, lastUpdated, transactions) {
     }
     else {
         // Add transaction rows
-        transactions.slice(-3).forEach(transaction => {
+        transactions.slice(0, 3).forEach(transaction => {
             let transactionRow = createTransactionHTML(transaction);
             tbody.appendChild(transactionRow);
         });
