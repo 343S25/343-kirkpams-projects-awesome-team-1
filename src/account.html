@@ -134,17 +134,18 @@
                         </div>
                         <div class="mb-3">
                             <label for="transactionAmount" class="form-label">Amount</label>
-                            <input type="number" class="form-control" id="transactionAmount" placeholder="Enter amount"
-                                required>
+                            <input name="transactionAmount" type="number" class="form-control" id="transactionAmount"
+                                placeholder="Enter amount" required>
                         </div>
                         <div class="mb-3">
                             <label for="transactionDate" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="transactionDate" required>
+                            <input name="transactionDate" type="date" class="form-control" id="transactionDate"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="transactionDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="transactionDescription" rows="3"
-                                placeholder="Enter description" required></textarea>
+                            <textarea name="transactionDescription" class="form-control" id="transactionDescription"
+                                rows="3" placeholder="Enter description" required></textarea>
                         </div>
                         <p class="text-danger" id="addTransactionWarning"></p>
                     </form>
@@ -170,13 +171,13 @@
                     <form id="stockForm">
                         <div class="mb-3">
                             <label for="stockSymbol" class="form-label">Stock Symbol</label>
-                            <input type="text" class="form-control" id="stockSymbol" placeholder="Enter stock symbol"
-                                required>
+                            <input name="stockSymbol" type="text" class="form-control" id="stockSymbol"
+                                placeholder="Enter stock symbol" required>
                         </div>
                         <div class="mb-3">
                             <label for="stockQuantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="stockQuantity" placeholder="Enter quantity"
-                                required>
+                            <input name="stockQuantity" type="number" class="form-control" id="stockQuantity"
+                                placeholder="Enter quantity" required>
                         </div>
                         <p class="text-danger" id="addStockWarning"></p>
                     </form>
@@ -202,25 +203,27 @@
                     <form id="editTransactionForm">
                         <p aria-hidden="true" class="d-none" id="dateCreatedID">Date Created</p>
                         <div class="mb-3">
-                            <label for="transactionType" class="form-label">Type</label>
-                            <select name="transactionType" class="form-select" id="editTransactionType" required>
+                            <label for="editTransactionType" class="form-label">Type</label>
+                            <select name="editTransactionType" class="form-select" id="editTransactionType" required>
                                 <option value="Deposit">Deposit</option>
                                 <option value="Withdrawal">Withdrawal</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="editTransactionAmount" class="form-label">Amount</label>
-                            <input type="number" class="form-control" id="editTransactionAmount"
-                                placeholder="Enter amount" required>
+                            <input name="editTransactionAmount" type="number" class="form-control"
+                                id="editTransactionAmount" placeholder="Enter amount" required>
                         </div>
                         <div class="mb-3">
                             <label for="editTransactionDate" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="editTransactionDate" required>
+                            <input name="editTransactionDate" type="date" class="form-control" id="editTransactionDate"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="editTransactionDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="editTransactionDescription" rows="3"
-                                placeholder="Enter description" required></textarea>
+                            <textarea name="editTransactionDescription" class="form-control"
+                                id="editTransactionDescription" rows="3" placeholder="Enter description"
+                                required></textarea>
                         </div>
                         <p class="text-danger" id="editTransactionWarning"></p>
                     </form>
@@ -250,7 +253,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editStockQuantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="editStockQuantity"
+                            <input name="editStockQuantity" type="number" class="form-control" id="editStockQuantity"
                                 placeholder="Enter quantity" required>
                         </div>
                         <p class="text-danger" id="editStockWarning"></p>
@@ -279,14 +282,14 @@
                     <form id="editAccountForm">
                         <div class="mb-3">
                             <label for="editAccountName" class="form-label">Account Name</label>
-                            <input type="text" class="form-control" id="editAccountName"
+                            <input name="editAccountName" type="text" class="form-control" id="editAccountName"
                                 placeholder="Enter account name" required>
                         </div>
                         <div class="mb-3">
                             <label for="editAccountDescription" class="form-label">Account
                                 Description</label>
-                            <textarea class="form-control" id="editAccountDescription" rows="3"
-                                placeholder="Enter account description"></textarea>
+                            <textarea name="editAccountDescription" class="form-control" id="editAccountDescription"
+                                rows="3" placeholder="Enter account description"></textarea>
                         </div>
                         <p class="text-danger" id="editAccountWarning"></p>
                     </form>

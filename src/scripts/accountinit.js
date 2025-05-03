@@ -5,7 +5,8 @@ function displayFullAccount(account) {
     if (!account.isAsset) {
         let stocksDiv = document.getElementById('stocksDiv');
         stocksDiv.classList.add('d-none'); // Hide stocks section for liabilities
-        let transactionTypeInputs = document.querySelectorAll('select[name="transactionType"]');
+        let transactionTypeInput1 = document.querySelectorAll('select[name="transactionType"]');
+        let transactionTypeInput2 = document.querySelectorAll('select[name="editTransactionType"]');
         console.log(transactionTypeInputs);
         transactionTypeInputs.forEach(select => {
             select.innerHTML = '<option value="Deposit" selected>Deposit</option>';
