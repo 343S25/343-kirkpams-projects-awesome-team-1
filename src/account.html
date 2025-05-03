@@ -127,7 +127,7 @@
                     <form id="transactionForm">
                         <div class="mb-3">
                             <label for="transactionType" class="form-label">Type</label>
-                            <select class="form-select" id="transactionType" required>
+                            <select name="transactionType" class="form-select" id="transactionType" required>
                                 <option value="Deposit" selected>Deposit</option>
                                 <option value="Withdrawal">Withdrawal</option>
                             </select>
@@ -200,9 +200,10 @@
                 </div>
                 <div class="modal-body">
                     <form id="editTransactionForm">
+                        <p aria-hidden="true" class="d-none" id="dateCreatedID">Date Created</p>
                         <div class="mb-3">
-                            <label for="editTransactionType" class="form-label">Type</label>
-                            <select class="form-select" id="editTransactionType" required>
+                            <label for="transactionType" class="form-label">Type</label>
+                            <select name="transactionType" class="form-select" id="editTransactionType" required>
                                 <option value="Deposit">Deposit</option>
                                 <option value="Withdrawal">Withdrawal</option>
                             </select>
@@ -228,8 +229,8 @@
                     <button type="button" class="btn btn-secondary" id="editTransactionClose" data-bs-dismiss="modal"
                         aria-label="Close">Close</button>
                     <button type="submit" class="btn btn-primary" id="editTransactionButton">Save Changes</button>
-                    <button type="button" class="btn btn-danger" id="deleteTransactionButton" data-bs-toggle="modal"
-                        data-bs-target="#confirmDeleteTransactionModal">Delete Transaction</button>
+                    <button type="button" class="btn btn-danger" id="deleteTransactionButton">Delete
+                        Transaction</button>
                 </div>
             </div>
         </div>
@@ -245,9 +246,7 @@
                 <div class="modal-body">
                     <form id="editStockForm">
                         <div class="mb-3">
-                            <label for="editStockSymbol" class="form-label">Stock Symbol</label>
-                            <input type="text" class="form-control" id="editStockSymbol"
-                                placeholder="Enter stock symbol" required>
+                            <h5 id="editStockSymbol">Placeholder</h5>
                         </div>
                         <div class="mb-3">
                             <label for="editStockQuantity" class="form-label">Quantity</label>
@@ -262,8 +261,7 @@
                         aria-label="Close">Close</button>
                     <button type="submit" class="btn btn-primary" id="editStockButton">Save
                         Changes</button>
-                    <button type="button" class="btn btn-danger" id="deleteStockButton" data-bs-toggle="modal"
-                        data-bs-target="#confirmDeleteStockModal">Delete
+                    <button type="button" class="btn btn-danger" id="deleteStockButton">Delete
                         Stock</button>
                 </div>
             </div>

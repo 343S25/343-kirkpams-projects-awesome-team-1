@@ -5,6 +5,11 @@ function displayFullAccount(account) {
     if (!account.isAsset) {
         let stocksDiv = document.getElementById('stocksDiv');
         stocksDiv.classList.add('d-none'); // Hide stocks section for liabilities
+        let transactionTypeInputs = document.querySelectorAll('select[name="transactionType"]');
+        console.log(transactionTypeInputs);
+        transactionTypeInputs.forEach(select => {
+            select.innerHTML = '<option value="Deposit" selected>Deposit</option>';
+        });
     }
 
     let tbody = document.querySelector('tbody');
@@ -16,7 +21,6 @@ function displayFullAccount(account) {
     let stockTbody = document.querySelectorAll('tbody')[1];
     account.stocks.forEach(stock => {
         getStockQuote(stock.ticker).then(quote => {
-            console.log(quote);
             stock.quote = quote['05. price']; // Update stock quote with fetched data
             let stockRow = createStockHTML(stock);
             stockTbody.appendChild(stockRow);
@@ -43,6 +47,16 @@ function displayFullAccount(account) {
 
 
 (function () {
+    // Set max date for all date inputs to today
+    // let today = new Date();
+    // const offset = today.getTimezoneOffset()
+    // today = new Date(today.getTime() - (offset * 60 * 1000))
+    // today = today.toISOString().split('T')[0]
+    // let dateInputs = document.querySelectorAll('input[type="date"]');
+    // dateInputs.forEach(input => {
+    //     input.setAttribute('max', today);
+    // });
+
     // Check query string for account name
     let urlParams = new URLSearchParams(window.location.search);
     let accountNameId = urlParams.get('name');
@@ -65,8 +79,11 @@ function displayFullAccount(account) {
         return;
     }
 
+    // If account is liability
+
     // Order transactions
     reorderTransactions(accountNameId);
+    retotalBalance(account);
 
     // Create HTML for account
     displayFullAccount(account);
@@ -92,16 +109,11 @@ function displayFullAccount(account) {
     });
 
     document.getElementById('saveEditAccountButton').addEventListener('click', function (event) {
-        let newName = document.getElementById('editAccountName').value;
-        let newDescription = document.getElementById('editAccountDescription').value;
+        saveAccount(account, accounts);
+    });
 
-        account.id = newName.split(' ').join('-').toLowerCase(); // Update account ID based on new name
-        account.name = newName;
-        account.description = newDescription;
-        account.lastUpdated = new Date().toLocaleDateString();
-
-        localStorage.setItem('accounts', JSON.stringify(accounts));
-        location.href = `account.html?name=${account.id}`; // Redirect to updated account page
+    document.getElementById('editTransactionButton').addEventListener('click', function (event) {
+        transaction = saveTransaction(account, accounts);
     });
 
 
@@ -109,5 +121,23 @@ function displayFullAccount(account) {
     document.getElementById('confirmDeleteAccountButton').addEventListener('click', function (event) {
         deleteAccount(account);
     });
+
+    // Delete stock button
+    document.getElementById('deleteStockButton').addEventListener('click', function (event) {
+        let stockTicker = document.getElementById('editStockSymbol').textContent;
+        account.stocks = account.stocks.filter(stock => stock.ticker !== stockTicker);
+        localStorage.setItem('accounts', JSON.stringify(accounts));
+        location.reload();
+    });
+
+    // Delete transaction button
+    document.getElementById('deleteTransactionButton').addEventListener('click', function (event) {
+        let dateCreated = JSON.parse(document.getElementById('dateCreatedID').textContent);
+        account.transactions = account.transactions.filter(transaction => transaction.dateCreated !== dateCreated);
+        localStorage.setItem('accounts', JSON.stringify(accounts));
+        location.reload();
+    });
+
+
 
 })();

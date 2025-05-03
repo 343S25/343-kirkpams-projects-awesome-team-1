@@ -24,7 +24,6 @@ function createTransactionHTML(transaction) {
     transactionRow.removeAttribute('id');
     transactionRow.classList.remove('d-none');
     let childTds = transactionRow.querySelectorAll('td');
-    console.log(childTds);
     // Fill in transaction details
     childTds[0].textContent = transaction.isDeposit ? 'Deposit' : 'Withdrawal';
     childTds[1].textContent = transaction.date;
@@ -57,6 +56,9 @@ function createStockHTML(stock) {
     childTds[1].textContent = stock.quantity;
     childTds[2].textContent = `$${stock.quote.toLocaleString()}`; // Format amount with commas
     childTds[3].textContent = `$${(stock.quantity * stock.quote).toLocaleString()}`; // Format amount with commas
+    childTds[4].querySelector('button').addEventListener('click', () => {
+        fillStockEditModal(stock);
+    });
 
     return stockRow;
 }
@@ -77,7 +79,6 @@ function addTransaction(accountName) {
     accounts = JSON.parse(accounts);
     let accountNameId = accountName.split(' ').join('-').toLowerCase();
     let account = accounts.find(account => account.id === accountNameId);
-    console.log(account);
     if (!account) {
         document.getElementById('addTransactionWarning').textContent = 'No account found.';
         return;
@@ -113,8 +114,8 @@ function addTransaction(accountName) {
     document.getElementById('transactionDescription').value = '';
     document.getElementById('transactionDate').value = '';
     document.getElementById('transactionType').value = 'Deposit';
-    let close = document.getElementById('transactionClose');
-    close.click();
+
+    location.reload();
 
 }
 
@@ -141,10 +142,18 @@ function addStock(accountName) {
 
     getStockQuote(ticker)
         .then(quote => {
+            console.log(quote);
+
+            if (quote === undefined) {
+                warning.textContent = 'API is over request limit.';
+            }
+
+
             if (Object.keys(quote).length === 0) {
                 warning.textContent = 'Invalid stock ticker.';
                 return;
             }
+
 
             let stock = {
                 ticker: ticker,
@@ -186,11 +195,15 @@ function fillTransactionEditModal(transaction) {
     let transactionAmount = document.getElementById('editTransactionAmount');
     let transactionDescription = document.getElementById('editTransactionDescription');
     let transactionDate = document.getElementById('editTransactionDate');
+    let dateCreated = document.getElementById('dateCreatedID');
 
     transactionType.value = transaction.isDeposit ? 'Deposit' : 'Withdrawal';
     transactionAmount.value = transaction.amount;
     transactionDescription.value = transaction.description;
     transactionDate.value = transaction.date;
+
+    // Unique hidden id
+    dateCreated.textContent = JSON.stringify(transaction.dateCreated);
 }
 
 function fillAccountEditModal(account) {
@@ -201,15 +214,80 @@ function fillAccountEditModal(account) {
     description.value = account.description || '';
 }
 
+function fillStockEditModal(stock) {
+    let stockSymbol = document.getElementById('editStockSymbol');
+    let stockQuantity = document.getElementById('editStockQuantity');
+
+    stockSymbol.textContent = stock.ticker;
+    stockQuantity.value = stock.quantity;
+}
+
+function saveTransaction(account, accounts) {
+
+
+    let dateCreated = JSON.parse(document.getElementById('dateCreatedID').textContent);
+    let transaction = account.transactions.find(transaction => transaction.dateCreated === dateCreated);
+    account.transactions = account.transactions.filter(transaction => transaction.dateCreated !== dateCreated);
+
+    let newType = document.getElementById('editTransactionType').value;
+    let newAmount = parseFloat(document.getElementById('editTransactionAmount').value);
+    let newDescription = document.getElementById('editTransactionDescription').value;
+    let newDate = document.getElementById('editTransactionDate').value;
+
+    transaction = {
+        date: newDate,
+        isDeposit: newType,
+        amount: newAmount,
+        description: newDescription,
+        dateCreated: transaction.dateCreated
+    }
+
+    account.transactions.push(transaction);
+    account.lastUpdated = new Date().toLocaleDateString();
+
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    location.reload();
+}
+
+function saveStock(account, accounts) {
+    let stockTicker = document.getElementById('editStockSymbol').textContent;
+    let stockQuantity = parseFloat(document.getElementById('editStockQuantity').value);
+    let stock = account.stocks.find(stock => stock.ticker === stockTicker);
+    account.stocks = account.stocks.filter(stock => stock.ticker !== stockTicker);
+
+    if (stock) {
+        stock.quantity = stockQuantity;
+        account.stocks.push(stock);
+    } else {
+        let newStock = {
+            ticker: stockTicker,
+            quantity: stockQuantity,
+            quote: 0 // Placeholder, will be updated with API call
+        }
+        account.stocks.push(newStock);
+    }
+
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    location.reload();
+}
+
+function saveAccount(account, accounts) {
+    let newName = document.getElementById('editAccountName').value;
+    let newDescription = document.getElementById('editAccountDescription').value;
+
+    account.id = newName.split(' ').join('-').toLowerCase(); // Update account ID based on new name
+    account.name = newName;
+    account.description = newDescription;
+    account.lastUpdated = new Date().toLocaleDateString();
+
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    location.href = `account.html?name=${account.id}`; // Redirect to updated account page
+}
+
 
 function deleteTransaction(account, transaction) {
     account.transactions = account.transactions.filter(t => t.dateCreated !== transaction.dateCreated);
-    retotalAccount(account);
-}
-
-function deleteStock(account, stockTicker) {
-    account.stocks = account.stocks.filter(stock => stock.ticker !== stockTicker);
-    retotalAccount(account);
+    // retotalAccount(account);
 }
 
 function deleteAccount(account) {
@@ -218,4 +296,25 @@ function deleteAccount(account) {
     accounts = accounts.filter(acc => acc.id !== account.id);
     localStorage.setItem('accounts', JSON.stringify(accounts));
     window.location.href = 'index.html';
+}
+
+function retotalBalance(account) {
+    let accounts = localStorage.getItem('accounts');
+    accounts = JSON.parse(accounts);
+    account = accounts.find(acc => acc.id === account.id);
+
+    account.balance = 0;
+    account.transactions.forEach(transaction => {
+        if (transaction.isDeposit) {
+            account.balance += transaction.amount;
+        } else {
+            account.balance -= transaction.amount;
+        }
+    });
+
+    account.stocks.forEach(stock => {
+        account.balance += (stock.quantity * stock.quote);
+    });
+
+    localStorage.setItem('accounts', JSON.stringify(accounts));
 }

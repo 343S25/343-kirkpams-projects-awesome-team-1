@@ -274,33 +274,45 @@ function modalSaveAccount() {
         }
     }
 
-
-    if (accountName && !isNaN(startingBalance) && startingBalance >= 0 && accountType) {
-        // Example transactions array (empty for a new account)
-        let transactions = [];
-
-        // Create the new account node
-        let accountNode = createAccountHTML(accountName, startingBalance, new Date().toLocaleDateString(), transactions);
-
-        // Add new account to corresponding div
-        if (isAsset) {
-            document.getElementById('assetAccountDiv').appendChild(accountNode);
-        } else {
-            document.getElementById('liabilityAccountDiv').appendChild(accountNode);
-        }
-
-        // Close the modal
-        let addAccountModal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
-        addAccountModal.hide();
-
-        // Clear the form
-        document.getElementById('addAccountForm').reset();
-        warning.textContent = '';
-
-    } else {
+    if (!accountName || isNaN(startingBalance) || startingBalance < 0 || !accountType) {
         warning.textContent = 'Please fill in all fields correctly.';
         return;
     }
+
+
+    // From StackOverflow https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd#:~:text=The%20simplest%20way%20to%20convert,getTimezoneOffset()%20*%2060000%20))%20.
+    // Get date in YYYY-MM-DD, like date input
+    let date = new Date();
+    const offset = date.getTimezoneOffset()
+    date = new Date(date.getTime() - (offset * 60 * 1000))
+    date = date.toISOString().split('T')[0]
+
+    // Starting transactions array
+    let transactions = [{
+        dateCreated: new Date(),
+        date: date,
+        description: 'Initial deposit',
+        amount: startingBalance,
+        isDeposit: accountType === 'asset' ? true : false,
+    }];
+
+    // Create the new account node
+    let accountNode = createAccountHTML(accountName, startingBalance, new Date().toLocaleDateString(), transactions);
+
+    // Add new account to corresponding div
+    if (isAsset) {
+        document.getElementById('assetAccountDiv').appendChild(accountNode);
+    } else {
+        document.getElementById('liabilityAccountDiv').appendChild(accountNode);
+    }
+
+    // Close the modal
+    let addAccountModal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
+    addAccountModal.hide();
+
+    // Clear the form
+    document.getElementById('addAccountForm').reset();
+    warning.textContent = '';
 
     let id = accountName.split(' ').join('-').toLowerCase();
 
@@ -309,7 +321,7 @@ function modalSaveAccount() {
         name: accountName,
         balance: startingBalance,
         lastUpdated: new Date().toLocaleDateString(),
-        transactions: [],
+        transactions: transactions,
         isAsset: isAsset,
         stocks: [],
         description: description,
@@ -327,11 +339,7 @@ function displayNetWorth() {
     let netWorth = 0;
 
     accounts.forEach(account => {
-        if (account.isAsset) {
-            netWorth += account.balance;
-        } else {
-            netWorth -= account.balance;
-        }
+        netWorth += account.balance;
     });
 
     let netWorthElem = document.getElementById('netWorthText');

@@ -6,6 +6,7 @@ const API_KEY = '8FOIK4FTAICVFHV5';
  * @param {string} symbol 
  */
 async function getStockQuote(symbol) {
+    console.log('Fetching stock quote for:', symbol);
     const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`
 
     let response = await fetch(url);
