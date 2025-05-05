@@ -250,6 +250,7 @@ function saveTransaction(account, accounts) {
     account.transactions.push(transaction);
     account.lastUpdated = new Date().toLocaleDateString();
 
+    retotalBalance(account);
     localStorage.setItem('accounts', JSON.stringify(accounts));
     location.reload();
 }
@@ -277,8 +278,10 @@ function saveStock(account, accounts) {
         account.stocks.push(newStock);
     }
 
+    retotalBalance(account);
     localStorage.setItem('accounts', JSON.stringify(accounts));
     location.reload();
+
 }
 
 function saveAccount(account, accounts) {
@@ -297,7 +300,7 @@ function saveAccount(account, accounts) {
 
 function deleteTransaction(account, transaction) {
     account.transactions = account.transactions.filter(t => t.dateCreated !== transaction.dateCreated);
-    // retotalAccount(account);
+    retotalBalance(account);
 }
 
 function deleteAccount(account) {

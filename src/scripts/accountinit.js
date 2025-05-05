@@ -112,8 +112,14 @@ function displayFullAccount(account) {
         saveAccount(account, accounts);
     });
 
+    // Save edit transactions
     document.getElementById('editTransactionButton').addEventListener('click', function (event) {
         transaction = saveTransaction(account, accounts);
+    });
+
+    // Save edit stock
+    document.getElementById('editStockButton').addEventListener('click', function (event) {
+        saveStock(account, accounts);
     });
 
 
@@ -126,6 +132,8 @@ function displayFullAccount(account) {
     document.getElementById('deleteStockButton').addEventListener('click', function (event) {
         let stockTicker = document.getElementById('editStockSymbol').textContent;
         account.stocks = account.stocks.filter(stock => stock.ticker !== stockTicker);
+
+        retotalBalance(account);
         localStorage.setItem('accounts', JSON.stringify(accounts));
         location.reload();
     });
