@@ -147,5 +147,9 @@ function displayFullAccount(account) {
     });
 
 
+    // Update stock values every 10 minutes
+    setInterval(updateStockValues, 10 * 60 * 1000);
+
+
 
 })();
