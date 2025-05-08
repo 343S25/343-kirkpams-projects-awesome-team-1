@@ -162,7 +162,26 @@ function modalSaveAccount() {
         isDeposit: accountType === 'asset' ? true : false,
     }];
 
+    let id = accountName.split(' ').join('-').toLowerCase();
+
+    accounts.push({
+        id: id,
+        name: accountName,
+        balance: isAsset ? startingBalance : -startingBalance,
+        lastUpdated: new Date().toLocaleDateString(),
+        transactions: transactions,
+        isAsset: isAsset,
+        stocks: [],
+        description: description,
+    });
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+    console.log('Accounts now:', accounts);
+
     // Create the new account node
+    if (!isAsset) {
+        startingBalance = -startingBalance; // Make the balance negative for liabilities
+    }
+
     let accountNode = createAccountHTML(accountName, startingBalance, new Date().toLocaleDateString(), transactions);
 
     // Add new account to corresponding div
@@ -172,28 +191,9 @@ function modalSaveAccount() {
         document.getElementById('liabilityAccountDiv').appendChild(accountNode);
     }
 
-    // Close the modal
-    let addAccountModal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
-    addAccountModal.hide();
-
     // Clear the form
     document.getElementById('addAccountForm').reset();
     warning.textContent = '';
-
-    let id = accountName.split(' ').join('-').toLowerCase();
-
-    accounts.push({
-        id: id,
-        name: accountName,
-        balance: startingBalance,
-        lastUpdated: new Date().toLocaleDateString(),
-        transactions: transactions,
-        isAsset: isAsset,
-        stocks: [],
-        description: description,
-    });
-    localStorage.setItem('accounts', JSON.stringify(accounts));
-    console.log('Accounts now:', accounts);
 
     let close = document.getElementById('saveAccountClose');
     close.click(); // Close the modal after saving
@@ -205,11 +205,15 @@ function displayNetWorth() {
     let netWorth = 0;
 
     accounts.forEach(account => {
-        netWorth += account.balance;
+        netWorth += account.balance; // Add asset balances
     });
 
     let netWorthElem = document.getElementById('netWorthText');
-    netWorthElem.textContent = `$${netWorth.toLocaleString()}`; // Format with commas
+    if (netWorth < 0) {
+        netWorthElem.textContent = `-$${Math.abs(netWorth).toLocaleString()}`; // Format negative net worth with commas
+    } else {
+        netWorthElem.textContent = `$${netWorth.toLocaleString()}`; // Format net worth with commas
+    }
 }
 
 /**
@@ -231,7 +235,12 @@ function displayThisMonth() {
     });
 
     let thisMonthElem = document.getElementById('thisMonthText');
-    thisMonthElem.textContent = `$${thisMonthTotal.toLocaleString()}`; // Format with commas
+
+    if (thisMonthTotal < 0) {
+        thisMonthElem.textContent = `-$${Math.abs(thisMonthTotal).toLocaleString()}`; // Format negative total with commas
+    } else {
+        thisMonthElem.textContent = `$${thisMonthTotal.toLocaleString()}`; // Format total with commas
+    }
 }
 
 /**
@@ -252,7 +261,11 @@ function displayThisYear() {
     });
 
     let thisYearElem = document.getElementById('thisYearText');
-    thisYearElem.textContent = `$${thisYearTotal.toLocaleString()}`; // Format with commas
+    if (thisYearTotal < 0) {
+        thisYearElem.textContent = `-$${Math.abs(thisYearTotal).toLocaleString()}`; // Format negative total with commas
+    } else {
+        thisYearElem.textContent = `$${thisYearTotal.toLocaleString()}`; // Format total with commas
+    }
 }
 
 /** 

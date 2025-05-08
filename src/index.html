@@ -132,14 +132,15 @@
   <div class="modal fade" id="addAccountModal" aria-labelledby="addAccountModalLabel">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-secondary text-white">
           <p class="h5 modal-title" id="addAccountModalLabel">Add New Account</p>
         </div>
         <div class="modal-body">
           <form id="addAccountForm">
             <div class="mb-3">
               <label for="accountNameInput" class="form-label">Account Name</label>
-              <input type="text" class="form-control" id="accountNameInput" placeholder="Enter account name" required>
+              <input type="text" class="form-control" id="accountNameInput" placeholder="Enter account name"
+                pattern="[a-zA-Z0-9]*" required>
             </div>
             <div class="mb-3">
               <label for="startingBalanceInput" class="form-label">Starting Balance</label>
@@ -157,7 +158,7 @@
             <div class="mb-3">
               <label for="accountDescriptionInput" class="form-label">Account Description</label>
               <textarea class="form-control" id="accountDescriptionInput" rows="3"
-                placeholder="Enter account description"></textarea>
+                placeholder="Enter account description" pattern="[a-zA-Z0-9!?*()&^%$#@.,]*"></textarea>
             </div>
             <p class="text-danger" id="addAccountWarning"></p>
           </form>

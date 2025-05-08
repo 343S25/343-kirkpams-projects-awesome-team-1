@@ -36,7 +36,12 @@ function displayFullAccount(account) {
 
     accountNameElem.textContent = account.name;
     typeElem.textContent = account.isAsset ? 'Type: Asset' : 'Type: Liability';
-    balanceElem.textContent = `Balance: $${account.balance.toLocaleString()}`; // Format balance with commas
+    if (account.balance < 0) {
+        balanceElem.textContent = `Balance: -$${Math.abs(account.balance).toLocaleString()}`; // Format negative balance with commas
+    } else {
+        balanceElem.textContent = `Balance: $${account.balance.toLocaleString()}`; // Format positive balance with commas
+    }
+
     lastUpdatedElem.textContent = `Last Updated: ${account.lastUpdated}`;
     if (account.description === undefined) {
         account.description = 'No description provided.';
