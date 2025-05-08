@@ -7,10 +7,10 @@ function displayLocalStorageData() {
         let liabilityDiv = document.getElementById('liabilityAccountDiv');
         accounts.forEach(account => {
             if (account.isAsset) {
-                assetDiv.appendChild(createAccountHTML2(account.name, account.balance, account.lastUpdated, account.transactions));
+                assetDiv.appendChild(createAccountHTML(account.name, account.balance, account.lastUpdated, account.transactions));
             }
             else {
-                liabilityDiv.appendChild(createAccountHTML2(account.name, account.balance, account.lastUpdated, account.transactions));
+                liabilityDiv.appendChild(createAccountHTML(account.name, account.balance, account.lastUpdated, account.transactions));
             }
         });
     }

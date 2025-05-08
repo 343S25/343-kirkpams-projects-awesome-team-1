@@ -46,7 +46,7 @@
  * @param {Array<transaction>} transactions 
  * @returns HTMLDivElement
  */
-function createAccountHTML2(accountName, balance, lastUpdated, transactions) {
+function createAccountHTML(accountName, balance, lastUpdated, transactions) {
     let accountNameId = accountName.split(' ').join('-').toLowerCase();
     // Clonse the account prototype
     let accountDiv = document.getElementById('accountPrototype').cloneNode(true);
