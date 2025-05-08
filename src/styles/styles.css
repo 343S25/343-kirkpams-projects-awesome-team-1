@@ -9,3 +9,33 @@ body {
 h1 {
     background: #3c3e46;
 }
+
+header {
+    background: #3c3e46;
+}
+
+canvas {
+    background: whitesmoke;
+}
+
+#ataGlanceDiv {
+    background: white;
+}
+
+#accountDiv {
+    background: #3c3e46;
+}
+
+#helpDiv {
+    background: white;
+}
+
+@media only screen and (max-width: 992px) {
+    #summary {
+        background-color: #DAE3E5;
+    }
+
+    #ataGlanceDiv {
+        background-color: white;
+    }
+}
