@@ -153,11 +153,11 @@
                             <input name="transactionDate" type="date" class="form-control" id="transactionDate"
                                 required>
                         </div>
+                        <!-- pattern="[a-zA-Z0-9!?*()&^%$#@.,]*"-->
                         <div class="mb-3">
                             <label for="transactionDescription" class="form-label">Description</label>
                             <textarea name="transactionDescription" class="form-control" id="transactionDescription"
-                                rows="3" placeholder="Enter description" pattern="[a-zA-Z0-9!?*()&^%$#@.,]*"
-                                required></textarea>
+                                rows="3" placeholder="Enter description" required></textarea>
                         </div>
                         <p class="text-danger" id="addTransactionWarning"></p>
                     </form>
@@ -234,8 +234,8 @@
                         <div class="mb-3">
                             <label for="editTransactionDescription" class="form-label">Description</label>
                             <textarea name="editTransactionDescription" class="form-control"
-                                id="editTransactionDescription" rows="3" placeholder="Enter description" required
-                                pattern="[a-zA-Z0-9!?*()&^%$#@.,]*"></textarea>
+                                id="editTransactionDescription" rows="3" placeholder="Enter description"
+                                required></textarea>
                         </div>
                         <p class="text-danger" id="editTransactionWarning"></p>
                     </form>
@@ -301,8 +301,7 @@
                             <label for="editAccountDescription" class="form-label">Account
                                 Description</label>
                             <textarea name="editAccountDescription" class="form-control" id="editAccountDescription"
-                                rows="3" placeholder="Enter account description"
-                                pattern="[a-zA-Z0-9!?*()&^%$#@.,]*"></textarea>
+                                rows="3" placeholder="Enter account description"></textarea>
                         </div>
                         <p class="text-danger" id="editAccountWarning"></p>
                     </form>
