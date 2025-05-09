@@ -48,7 +48,7 @@
  */
 function createAccountHTML(accountName, balance, lastUpdated, transactions) {
     let accountNameId = accountName.split(' ').join('-').toLowerCase();
-    // Clonse the account prototype
+    // Clone the account prototype
     let accountDiv = document.getElementById('accountPrototype').cloneNode(true);
     accountDiv.id = accountNameId;
     accountDiv.classList.remove('d-none'); // Remove the hidden class
@@ -174,6 +174,7 @@ function modalSaveAccount() {
         stocks: [],
         description: description,
     });
+
     localStorage.setItem('accounts', JSON.stringify(accounts));
     console.log('Accounts now:', accounts);
 

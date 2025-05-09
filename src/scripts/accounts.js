@@ -239,9 +239,10 @@ function saveTransaction(account, accounts) {
     let newDescription = document.getElementById('editTransactionDescription').value;
     let newDate = document.getElementById('editTransactionDate').value;
 
+    console.log(newType);
     transaction = {
         date: newDate,
-        isDeposit: newType,
+        isDeposit: newType === 'Deposit',
         amount: newAmount,
         description: newDescription,
         dateCreated: transaction.dateCreated
@@ -337,6 +338,10 @@ function retotalBalance(account) {
 }
 
 
+/**
+ * Generate a line chart for the account balance over time.
+ * @param {Object} account 
+ */
 function generateLineChart(account) {
     let ctx = document.getElementById('balanceChart').getContext('2d');
     let transactions = account.transactions.sort((a, b) => new Date(a.date) - new Date(b.date));

@@ -23,7 +23,6 @@ function displayLocalStorageData() {
 
 // Initialization
 (function () {
-    // localStorage.clear(); // For testing
     document.getElementById('saveAccountButton').addEventListener('click', function (event) {
         event.preventDefault();
         modalSaveAccount();
@@ -33,8 +32,7 @@ function displayLocalStorageData() {
     document.getElementById('importButton').addEventListener('click', function (event) {
         event.preventDefault();
         importData();
-    }
-    );
+    });
 
     document.getElementById('exportButton').addEventListener('click', function (event) {
         exportData();
